@@ -2,7 +2,7 @@ buildscript {
 	ext {
 		springBootVersion = '1.4.3.RELEASE'
 		tomcatVersion = '7.0.90'
-		baseProjectName = 'mammba_api'
+		baseProjectName = 'mammba'
 	}
 	repositories {
 		mavenCentral()
