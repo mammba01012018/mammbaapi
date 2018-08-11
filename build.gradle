@@ -46,7 +46,11 @@ dependencies {
 		'org.apache.tiles:tiles-servlet:3.0.8',
 		'org.apache.tiles:tiles-request-api:1.0.6',
 		'org.apache.tiles:tiles-jsp:3.0.8',
-		'javax.servlet:jstl')
+		'javax.servlet:jstl',
+		'org.springframework.boot:spring-boot-starter-jdbc',
+		'org.springframework:spring-jdbc',
+		'mysql:mysql-connector-java:5.1.22'
+		)
 		
 		
 	providedCompile 'org.apache.tomcat.embed:tomcat-embed-jasper',

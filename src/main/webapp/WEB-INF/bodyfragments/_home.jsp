@@ -1,5 +1,5 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
-
+<script src="resources/script/login.js"></script>
  <div class="container">
      <div class="jumbotron">
          <div align="center">
@@ -78,7 +78,7 @@
          </div>
      </div>
  </div>
- 
+ <form id="formoid">
  <div class="modal fade" id="login" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -87,17 +87,26 @@
                 <div class="modal-header">
                     <p>Login to Mammba Partners</p>
                 </div>
-
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="partnerEmail" class="col-lg-2 control-label">Email</label>
-
-                        <div class="col-lg-10">
-                            <input type="email" class="form-control" id="partnerEmail" placeholder="partner@mammba.com"/>
-                        </div>
-                    </div>
-
-                </div>
+				
+				
+	                <div class="modal-body">
+	                    <div class="form-group">
+	                        <label for="userEmail" class="col-lg-2 control-label">Email</label>
+	
+	                        <div class="col-lg-10">
+	                            <input type="email" class="form-control" id="userEmail" placeholder="partner@mammba.com"/>
+	                        </div>
+	                        
+	                        <label for="password" class="col-lg-2 control-label">Password</label>
+	
+	                        <div class="col-lg-10">
+	                            <input type="password" class="form-control" id="password"/>
+	                        </div>
+	                    </div>
+	
+	                </div>
+	             
+	             
                 <div class="modal-footer">
                     <a class="btn btn-default" data-dismiss="modal">Close</a>
                     <button class="btn btn-primary" type="submit">Submit</button>
@@ -107,3 +116,4 @@
         </div>
     </div>
 </div>
+</form>
