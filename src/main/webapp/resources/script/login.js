@@ -1,9 +1,9 @@
 $(document).ready(function() {
 	$("#submitBtn").on("click",function(event) {
-		console.log('enter here.');
+		console.log('uri:' + $(location).attr('pathname'));
 		$.ajax({
             type: "post",
-            url: "/login",
+            url: $(location).attr('pathname') + "/login",
             data: {
             	"userEmail": $('#userEmail').val(),
             	"password": $('#password').val()

@@ -15,7 +15,7 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 	
-	@PostMapping("/mammba/loginUser")
+	@PostMapping("/loginUser")
 	public ResponseEntity<?> validateLogin(@RequestBody LoginModel loginModel) {
 		if (this.loginService.isLoginValid(loginModel)) {
 			return ResponseEntity.ok("success");
