@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$("#formoid").submit(function(event) {
+	$("#submitBtn").on("click",function(event) {
 		console.log('enter here.');
 		$.ajax({
             type: "post",
@@ -10,8 +10,12 @@ $(document).ready(function() {
   
                 },
                 contentType: "application/x-www-form-urlencoded",
-            success: function(responseData, textStatus, jqXHR) {
-                alert("data saved")
+            success: function(responseData, textStatus, jqXHR){
+                if (responseData === 'success') {
+                	$("#result").text('Login Successful');
+                } else {
+                	$("#result").text('Login Failed.');
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(errorThrown);

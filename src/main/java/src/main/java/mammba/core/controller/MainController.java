@@ -3,6 +3,7 @@ package src.main.java.mammba.core.controller;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,15 +25,15 @@ public class MainController {
 	}
 
 	@RequestMapping(value = { "/login" }, method = RequestMethod.POST)
-	public String login(@RequestParam String userEmail, @RequestParam String password) {
+	public ResponseEntity<?> login(@RequestParam String userEmail, @RequestParam String password) {
 		LoginModel loginModel = new LoginModel();
 		loginModel.setUserEmail(userEmail);
 		loginModel.setPassword(password);
 		loginModel.setLocalDate(LocalDate.now());
 		if (this.loginService.isLoginValid(loginModel)) {
-			return "success";
+			return ResponseEntity.ok("success");
 		} else {
-			return "fail";
+			return ResponseEntity.ok("fail");
 		}
 		
 	}

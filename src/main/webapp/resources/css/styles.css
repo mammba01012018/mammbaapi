@@ -14,6 +14,8 @@ body {
     margin-bottom: 15px;
 }
 
-#contact-message {
-    resize: vertical;
+#result {
+    margin-left: 50%;
+    margin-top: 5%;
+    
 }

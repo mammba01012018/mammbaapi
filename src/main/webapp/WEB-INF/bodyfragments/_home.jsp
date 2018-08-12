@@ -78,7 +78,7 @@
          </div>
      </div>
  </div>
- <form id="formoid">
+
  <div class="modal fade" id="login" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -102,6 +102,8 @@
 	                        <div class="col-lg-10">
 	                            <input type="password" class="form-control" id="password"/>
 	                        </div>
+	                        <br/><br/>
+	                        <label id="result"></label>
 	                    </div>
 	
 	                </div>
@@ -109,11 +111,11 @@
 	             
                 <div class="modal-footer">
                     <a class="btn btn-default" data-dismiss="modal">Close</a>
-                    <button class="btn btn-primary" type="submit">Submit</button>
+                    <button class="btn btn-primary" type="button" id="submitBtn">Submit</button>
                 </div>
 
             </form>
         </div>
     </div>
 </div>
-</form>
+
