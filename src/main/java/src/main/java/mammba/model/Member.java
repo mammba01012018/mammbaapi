@@ -1,5 +1,16 @@
+/**
+ * Member.java - MAMMBA Application
+ * 2018 All rights reserved.
+ *
+ */
 package src.main.java.mammba.model;
 
+/**
+ * Getter setter for Member user data.
+ *
+ * @author Michelle Pancipane / Mardolfh Del Rosario
+ *
+ */
 public class Member extends MammbaUser {
 
 	private String firstName;
@@ -9,7 +20,7 @@ public class Member extends MammbaUser {
 	private String rate;
 
 	public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
     public void setFirstName(String firstName) {
@@ -17,7 +28,7 @@ public class Member extends MammbaUser {
     }
 
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 
     public void setLastName(String lastName) {
@@ -25,7 +36,7 @@ public class Member extends MammbaUser {
     }
 
     public String getMiddleInitial() {
-        return middleInitial;
+        return this.middleInitial;
     }
 
     public void setMiddleInitial(String middleInitial) {
@@ -33,7 +44,7 @@ public class Member extends MammbaUser {
     }
 
     public String getGender() {
-        return gender;
+        return this.gender;
     }
 
     public void setGender(String gender) {
@@ -41,7 +52,7 @@ public class Member extends MammbaUser {
     }
 
     public String getRate() {
-        return rate;
+        return this.rate;
     }
 
     public void setRate(String rate) {
@@ -50,10 +61,10 @@ public class Member extends MammbaUser {
 
 	@Override
     public String toString() {
-        return "Member [firstName=" + firstName + ", lastName=" + lastName + ", middleInitial=" + middleInitial
-                + ", gender=" + gender + ", rate=" + rate + "], " +
-                "MammbaUser [memberId=" + memberId + ", address1=" + address1 + ", address2=" + address2 +
-                ", province=" + province + ", country=" + country + "]";
+        return "Member [firstName=" + this.firstName + ", lastName=" + this.lastName +
+                ", middleInitial=" + this.middleInitial + ", gender=" + this.gender + ", rate=" + rate + "], " +
+                "MammbaUser [memberId=" + super.memberId + ", address1=" + super.address1 + ", address2=" +
+                super.address2 + ", province=" + super.province + ", country=" + super.country + "]";
     }
 
 }

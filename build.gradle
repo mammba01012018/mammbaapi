@@ -1,22 +1,22 @@
-buildscript {
-	ext {
-		springBootVersion = '1.4.3.RELEASE'
-		tomcatVersion = '7.0.90'
-		baseProjectName = 'mammba'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
-}
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 
+
+buildscript {
+    ext {
+        springBootVersion = '1.4.3.RELEASE'
+        tomcatVersion = '7.0.90'
+        baseProjectName = 'mammba'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
 
 jar {
 	baseName = 'boot-gradle'
@@ -41,12 +41,6 @@ configurations {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web',
-		'org.apache.tiles:tiles-api:3.0.8',
-		'org.apache.tiles:tiles-core:3.0.8',
-		'org.apache.tiles:tiles-servlet:3.0.8',
-		'org.apache.tiles:tiles-request-api:1.0.6',
-		'org.apache.tiles:tiles-jsp:3.0.8',
-		'javax.servlet:jstl',
 		'org.springframework.boot:spring-boot-starter-jdbc',
 		'org.springframework:spring-jdbc',
 		'mysql:mysql-connector-java:5.1.22'

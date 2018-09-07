@@ -1,31 +1,43 @@
+/**
+ * UserMemberServiceImpl.java - MAMMBA Application
+ * 2018 All rights reserved.
+ *
+ */
 package src.main.java.mammba.core.service.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import src.main.java.mammba.core.dao.RegisterDao;
+import src.main.java.mammba.core.dao.UserDao;
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
-import src.main.java.mammba.core.service.RegisterService;
+import src.main.java.mammba.core.service.UserService;
 import src.main.java.mammba.core.util.ObjectUtility;
 import src.main.java.mammba.model.MammbaUser;
 import src.main.java.mammba.model.Member;
 
-@Service("registerMember")
-public class RegisterMemberServiceImpl implements RegisterService {
+/**
+ * Implements User Member service.
+ *
+ * @author Mardolfh Del Rosario
+ *
+ */
+@Service("userMember")
+public class UserMemberServiceImpl implements UserService {
 
 	@Autowired
 	private ObjectUtility objectUtility;
 
 	@Autowired
-	private RegisterDao registerDao;
+	private UserDao userDao;
 
-	private static final Logger LOGGER = Logger.getLogger(RegisterMemberServiceImpl.class);
+	private static final Logger LOGGER = Logger.getLogger(UserMemberServiceImpl.class);
 	private static String ERR_ONE = "No user type exists.";
 	private static String ERR_TWO = "Member cannot be null";
 	private static String ERR_THREE = "Error register Mammba User";
 	private static String ERR_FOUR = "Member has incomplete details.";
+
 
 	@Override
 	public void register(MammbaUser mammbaUser) throws ServiceException {
@@ -49,6 +61,13 @@ public class RegisterMemberServiceImpl implements RegisterService {
 		}
 	}
 
+	/**
+	 * Registers the new Member.
+	 *
+	 * @param member                       Member reference object.
+	 * @throws DaoException                Database error.
+	 * @throws ServiceException            Business logic error.
+	 */
 	private void registerMember(Member member) throws DaoException, ServiceException {
 	    boolean isMemberValidated = false;
 
@@ -65,11 +84,12 @@ public class RegisterMemberServiceImpl implements RegisterService {
         }
 
         if (isMemberValidated) {
-            this.registerDao.registerMember(member);
+            this.userDao.registerMember(member);
         } else {
             LOGGER.error(ERR_FOUR);
             throw new ServiceException(ERR_FOUR);
         }
 
 	}
+
 }

@@ -1,11 +1,29 @@
+/**
+ * ObjectUtility.java - MAMMBA Application
+ * 2018 All rights reserved.
+ *
+ */
 package src.main.java.mammba.core.util;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Utility helper class.
+ *
+ * @author Mardolfh Del Rosario
+ *
+ */
 @Component
 public class ObjectUtility {
+
+    /**
+     * Checks a certain object if it is a null or empty value.
+     *
+     * @param o                     Object reference.
+     * @return                      true/false.
+     */
 	public boolean isNullOrEmpty(Object o) {
 		if (o == null) {
 			return true;
@@ -20,7 +38,7 @@ public class ObjectUtility {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }
