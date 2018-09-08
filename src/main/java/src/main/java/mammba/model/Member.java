@@ -63,8 +63,9 @@ public class Member extends MammbaUser {
     public String toString() {
         return "Member [firstName=" + this.firstName + ", lastName=" + this.lastName +
                 ", middleInitial=" + this.middleInitial + ", gender=" + this.gender + ", rate=" + rate + "], " +
-                "MammbaUser [memberId=" + super.memberId + ", address1=" + super.address1 + ", address2=" +
-                super.address2 + ", province=" + super.province + ", country=" + super.country + "]";
+                "MammbaUser [memberId=" + super.userId + ", address1=" + super.address1 + ", address2=" +
+                super.address2 + ", province=" + super.province + ", country=" + super.country + 
+                ", emailAddress=" + super.emailAddress + ", mobileNumber=" + super.mobileNumber + "]";
     }
 
 }

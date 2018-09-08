@@ -7,7 +7,9 @@ package src.main.java.mammba.core.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.util.QueryManager;
 import src.main.java.mammba.model.LoginModel;
 import src.main.java.mammba.model.Member;
+import src.main.java.mammba.model.Partner;
 
 /**
  * UserDao implementation for user functions.
@@ -79,9 +82,58 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public void registerMember(Member member) throws DaoException {
-        // TODO Auto-generated method stub
+    public int registerMember(Member member) throws DaoException {
+    	try {
+    		Map<String, Object> paramMap = new HashMap<String, Object>();
+    		paramMap.put("firstName", member.getFirstName());
+            paramMap.put("lastName", member.getLastName());
+            paramMap.put("middleInitial", member.getMiddleInitial());
+            paramMap.put("gender", member.getGender());
+            paramMap.put("address1", member.getAddress1());
+            paramMap.put("address2", member.getAddress2());
+            paramMap.put("province", member.getProvince());
+            paramMap.put("country", member.getCountry());
+            paramMap.put("emailAddress", member.getEmailAddress());
+            paramMap.put("mobileNumber", member.getMobileNumber());
+            return this.namedParameterJdbcTemplate.update("registerMember", paramMap);  
+    	} catch (DataAccessException e) {
+    		LOGGER.error("registerMember()-exception");
+			throw new DaoException("MAMMBA[UDI]-01-Database error");
+    	}
 
     }
+
+	@Override
+	public int registerPartner(Partner partner) throws DaoException {
+		try {
+    		Map<String, Object> paramMap = new HashMap<String, Object>();
+    		paramMap.put("partnerName", partner.getPartnerName());
+    		paramMap.put("iataNumber", partner.getIataNumber());
+    		paramMap.put("companyName", partner.getCompanyName());
+    		paramMap.put("address1", partner.getAddress1());
+    		paramMap.put("province", partner.getProvince());
+    		paramMap.put("country", partner.getCountry());
+    		paramMap.put("telNumber", partner.getTelNumber());
+    		paramMap.put("mobileNumber", partner.getMobileNumber());
+    		paramMap.put("fax", partner.getFax());
+    		paramMap.put("emailAddress", partner.getEmailAddress());
+    		paramMap.put("numOfStaff", partner.getNumOfStaff());
+    		paramMap.put("tinNumber", partner.getTinNumber());
+    		paramMap.put("agencyType", partner.getAgencyType());
+    		paramMap.put("typeOfService", partner.getTypeOfService());
+    		paramMap.put("contactPersonName", partner.getContactPersonName());
+    		paramMap.put("contactPersonPosition", partner.getContactPersonPosition());
+    		paramMap.put("contactPersonTelNum", partner.getContactPersonTelNum());
+    		paramMap.put("contactPersonMobileNum", partner.getContactPersonMobileNum());
+    		paramMap.put("businessPermit", partner.getBusinessPermit());
+    		paramMap.put("businessPermitExpiry", partner.getBusinessPermitExpiry());
+    		paramMap.put("DTI", partner.getDTI());
+    		paramMap.put("SEC", partner.getSEC());
+            return this.namedParameterJdbcTemplate.update("registerMember", paramMap);  
+    	} catch (DataAccessException e) {
+    		LOGGER.error("registerMember()-exception");
+			throw new DaoException("MAMMBA[UDI]-01-Database error");
+    	}
+	}
 
 }

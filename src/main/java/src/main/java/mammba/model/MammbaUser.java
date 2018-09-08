@@ -13,17 +13,19 @@ package src.main.java.mammba.model;
  */
 public class MammbaUser {
 
-    protected int memberId;
+    protected int userId;
     protected String address1;
     protected String address2;
     protected String province;
     protected String country;
+    protected String emailAddress;
+    protected String mobileNumber;
 
-    public int getMemberId() {
-        return this.memberId;
+    public int getUserId() {
+        return this.userId;
     }
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
     public String getAddress1() {
         return this.address1;
@@ -49,5 +51,17 @@ public class MammbaUser {
     public void setCountry(String country) {
         this.country = country;
     }
-
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+    
 }
