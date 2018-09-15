@@ -43,7 +43,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web',
 		'org.springframework.boot:spring-boot-starter-jdbc',
 		'org.springframework:spring-jdbc',
-		'mysql:mysql-connector-java:5.1.22'
+		'mysql:mysql-connector-java:5.1.22',
+		'org.springframework.boot:spring-boot-starter-security'
 		)
 		
 		

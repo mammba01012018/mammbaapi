@@ -5,20 +5,21 @@
  */
 package src.main.java.mammba.core.controller;
 
-import java.time.LocalDate;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import src.main.java.mammba.core.exception.ServiceException;
-import src.main.java.mammba.core.service.MammbaUserService;
 import src.main.java.mammba.core.service.UserService;
-import src.main.java.mammba.model.LoginModel;
 import src.main.java.mammba.model.Member;
 
 /**
@@ -30,8 +31,6 @@ import src.main.java.mammba.model.Member;
 @RestController
 public class StarterController {
 
-    @Autowired
-    private MammbaUserService mammbaUserService;
 
 	@Autowired
 	@Qualifier(value="userMember")
@@ -39,32 +38,6 @@ public class StarterController {
 
 	private static final Logger LOGGER = Logger.getLogger(StarterController.class);
 
-
-	/**
-	 * Restful controller that handles the login whether mobile or web app.
-	 *
-	 * @param userEmail        email login
-	 * @param password         password must be encrypted
-	 * @return                 ResponseEntity - ok or fail.
-	 */
-	@PostMapping(value = { "/loginUser" })
-	public ResponseEntity<?> login(@RequestBody(required = true) LoginModel loginModel) {
-
-	    try {
-	        LOGGER.info("login()-start");
-	        loginModel.setLocalDate(LocalDate.now());
-	        if (this.mammbaUserService.isLoginValid(loginModel)) {
-	            return ResponseEntity.ok("MAMMBA[MC]-01-OK");
-	        } else {
-	            return ResponseEntity.ok("MAMMBA[MC]-02-FAIL");
-	        }
-	    } catch (ServiceException e) {
-	        return ResponseEntity.badRequest().body("MAMMBA[MC]-03-ERROR");
-	    } finally {
-	        LOGGER.info("login()-end");
-	    }
-
-	}
 
 	/**
 	 * Registers a new Mammba user - member.
@@ -86,4 +59,32 @@ public class StarterController {
 	    LOGGER.info("registerNewMember()-end");
 		return ResponseEntity.ok("MAMMBA[MC]-05-SUCCESS");
 	}
+
+	/**
+     * Get Mammba user info details.
+     *
+     * @param username         Member reference from request.
+     * @return                 ResponseEntity - bad request or success.
+     */
+    @PostMapping(value = { "/mammba-user" })
+    public ResponseEntity<?> getUserInfo(@RequestParam String username) {
+        LOGGER.info("getUserInfo()-start");
+        LOGGER.info(username);
+
+        LOGGER.info("getUserInfo()-end");
+        return ResponseEntity.ok("MAMMBA[MC]-06");
+    }
+
+    /**
+     * Logout session to the Mammba API.
+     *
+     * @param session           Session object.
+     */
+    @PostMapping(value = {"/mammba-user/logout"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(HttpSession session) {
+        LOGGER.info(session.getId() + " has logged out.");
+        session.invalidate();
+    }
+
 }
