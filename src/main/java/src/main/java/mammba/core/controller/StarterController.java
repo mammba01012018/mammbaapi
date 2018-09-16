@@ -52,7 +52,7 @@ public class StarterController {
      * @throws IOException      Error in generating cookies.
      */
     @GetMapping(value= {"/init"})
-    public void initialize(HttpSession session, HttpServletResponse response) throws IOException {
+    public String initialize(HttpSession session, HttpServletResponse response) throws IOException {
         CsrfToken token = (CsrfToken)
           session.getAttribute("org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN");
 
@@ -60,9 +60,12 @@ public class StarterController {
             LOGGER.info(session.getId() + " has logged in having: " + token.getToken());
             Cookie cookie = new Cookie("code", token.getToken());
             response.addCookie(cookie);
+            return token.getToken();
         } else {
             response.sendError(404);
         }
+
+        return null;
 
     }
 
