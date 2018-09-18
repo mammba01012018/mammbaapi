@@ -37,7 +37,6 @@ import src.main.java.mammba.model.Member;
 @RestController
 public class StarterController {
 
-
 	@Autowired
 	@Qualifier(value="userMember")
 	private UserService userMemberService;
