@@ -59,4 +59,11 @@ public interface UserDao {
     int addUserAcct(String username, String password, String email, String mobileNumber,
 			String userType, int memberId, int partnerId ) throws DaoException;
     
+    /**
+     * validates login details .
+     *
+     * @param loginModel            LoginModel object reference.
+     * @return                      true/false.
+     */
+	boolean isUserValid(LoginModel loginModel) throws DaoException;
 }

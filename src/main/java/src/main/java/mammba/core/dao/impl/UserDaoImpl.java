@@ -54,6 +54,18 @@ public class UserDaoImpl implements UserDao {
 			return loginModel;
 		}
 	}
+	
+	private static class UserMapper implements RowMapper<LoginModel> {
+
+		@Override
+		public LoginModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+			LoginModel loginModel = new LoginModel();
+			loginModel.setUserEmail(rs.getString("user_userName"));
+			loginModel.setPassword(rs.getString("user_password"));
+
+			return loginModel;
+		}
+	}
 
 	@Override
 	public boolean isLoginValid(LoginModel loginModel) throws DaoException {
@@ -156,5 +168,31 @@ public class UserDaoImpl implements UserDao {
     		LOGGER.error("registerMember()-exception");
 			throw new DaoException("MAMMBA[UDI]-01-Database error");
     	}
+	}
+
+
+	@Override
+	public boolean isUserValid(LoginModel loginModel) throws DaoException {
+		boolean isFound = false;
+		try {
+			String sql = this.queryManager.getQuery("getUser");
+			MapSqlParameterSource params = new MapSqlParameterSource();
+			params.addValue("username", loginModel.getUserEmail());
+			params.addValue("password", loginModel.getPassword());
+			List<LoginModel> user = this.namedParameterJdbcTemplate.query(sql,
+					params, new LoginMapper());
+			if (user != null && !user.isEmpty() &&
+				user.get(0).getUserEmail().equals(loginModel.getUserEmail()) &&
+				user.get(0).getPassword().equals(loginModel.getPassword())) {
+				isFound = true;
+				LOGGER.info("isLoginValid()-valid authentication");
+			}
+		} catch (SQLException | DataAccessException e) {
+			LOGGER.error("isLoginValid()-exception");
+			throw new DaoException("MAMMBA[UDI]-01-Database error");
+
+		}
+
+		return isFound;
 	}
 }
