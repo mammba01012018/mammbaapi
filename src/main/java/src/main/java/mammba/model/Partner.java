@@ -13,7 +13,8 @@ import java.sql.Date;
  *
  */
 public class Partner extends MammbaUser {
-	
+
+	private int partnerId;
 	private String partnerName;
 	private String iataNumber;
 	private String companyName;
@@ -32,6 +33,13 @@ public class Partner extends MammbaUser {
 	private String DTI;
 	private String SEC;
 	
+	
+	public int getPartnerId() {
+		return partnerId;
+	}
+	public void setPartnerId(int partnerId) {
+		this.partnerId = partnerId;
+	}
 	public String getPartnerName() {
 		return partnerName;
 	}
@@ -137,17 +145,14 @@ public class Partner extends MammbaUser {
 	
 	@Override
 	public String toString() {
-		return "Partner [partnerName=" + this.partnerName + ", iataNumber=" + this.iataNumber + ", companyName=" + this.companyName
-				+ ", telNumber=" + this.telNumber + ", fax=" + this.fax + ", numOfStaff=" + this.numOfStaff
-				+ ", tinNumber=" + this.tinNumber + ", agencyType=" + this.agencyType + ", typeOfService=" + this.typeOfService
-				+ ", contactPersonName=" + this.contactPersonName + ", contactPersonPosition=" + this.contactPersonPosition
-				+ ", contactPersonTelNum=" + this.contactPersonTelNum + ", contactPersonMobileNum=" + this.contactPersonMobileNum
-				+ ", businessPermit=" + this.businessPermit + ", businessPermitExpiry=" + this.businessPermitExpiry + ", DTI="
-				+ this.DTI + ", SEC=" + this.SEC + ", userId=" + super.userId + ", address1=" + super.address1 + ", address2=" + super.address2
-				+ ", province=" + super.province + ", country=" + super.country + ", emailAddress=" + super.emailAddress
-				+ ", mobileNumber=" + super.mobileNumber + "]";
+		return "Partner [partnerId=" + partnerId + ", partnerName=" + partnerName + ", iataNumber=" + iataNumber
+				+ ", companyName=" + companyName + ", telNumber=" + telNumber + ", fax=" + fax + ", numOfStaff="
+				+ numOfStaff + ", tinNumber=" + tinNumber + ", agencyType=" + agencyType + ", typeOfService="
+				+ typeOfService + ", contactPersonName=" + contactPersonName + ", contactPersonPosition="
+				+ contactPersonPosition + ", contactPersonTelNum=" + contactPersonTelNum + ", contactPersonMobileNum="
+				+ contactPersonMobileNum + ", businessPermit=" + businessPermit + ", businessPermitExpiry="
+				+ businessPermitExpiry + ", DTI=" + DTI + ", SEC=" + SEC + ", province=" + province + ", address1="
+				+ address1 + ", country=" + country + ", username=" + username + ", password=" + password
+				+ ", mobileNumber=" + mobileNumber + ", emailAddress=" + emailAddress + "]";
 	}
-	
-	
-
 }

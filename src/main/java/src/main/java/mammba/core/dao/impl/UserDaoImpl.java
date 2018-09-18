@@ -136,4 +136,25 @@ public class UserDaoImpl implements UserDao {
     	}
 	}
 
+	@Override
+	public int addUserAcct(String username, String password, String email,  String mobileNumber,
+			String userType, int memberId, int partnerId) throws DaoException {
+		
+		try {
+			java.sql.Date dateTime = new java.sql.Date(new java.util.Date().getTime());
+    		Map<String, Object> paramMap = new HashMap<String, Object>();
+    		paramMap.put("username", username);
+            paramMap.put("password", password);
+            paramMap.put("email", email);
+            paramMap.put("creTime", dateTime);
+            paramMap.put("mobileNumber", mobileNumber);
+            paramMap.put("userType", userType);
+            paramMap.put("memberId", memberId);
+            paramMap.put("partnerId", partnerId);
+            return this.namedParameterJdbcTemplate.update("addUserAcct", paramMap);  
+    	} catch (DataAccessException e) {
+    		LOGGER.error("registerMember()-exception");
+			throw new DaoException("MAMMBA[UDI]-01-Database error");
+    	}
+	}
 }

@@ -5,6 +5,8 @@
  */
 package src.main.java.mammba.core.dao;
 
+import java.sql.Date;
+
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.model.LoginModel;
 import src.main.java.mammba.model.Member;
@@ -40,5 +42,21 @@ public interface UserDao {
      * @return                      number of partner inserted
      */
     int registerPartner(Partner partner) throws DaoException;
+    
+    /**
+     * Add account details.
+     *
+     * @param username              accountname in logging in
+     * @param password              encrypted String
+     * @param email	                emailaddress of user
+     * @param creTime               Date created the account
+     * @param mobileNumber          String phone number
+     * @param userType              Partner / Member
+     * @param memberId              member Id if account is member
+     * @param partnerId             partner Id if account is partner
+     * @return                      number account inserted
+     */
+    int addUserAcct(String username, String password, String email, String mobileNumber,
+			String userType, int memberId, int partnerId ) throws DaoException;
     
 }
