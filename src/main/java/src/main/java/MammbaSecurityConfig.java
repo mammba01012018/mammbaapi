@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
 
 
 /**
@@ -39,22 +40,17 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(this.authProvider);
     }
 
-    /**
-     * Configure http filtering functions.
-     * @param http      HTTP security.
-     */
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        http.authorizeRequests().antMatchers("/init").anonymous();
-        http.authorizeRequests().antMatchers("/register").anonymous();
-        http.authorizeRequests().antMatchers("/login").anonymous();
-        http.authorizeRequests().antMatchers("**/mammba-**").authenticated();
-        http.authorizeRequests().antMatchers("**/mammba-**").hasRole("MAMMBA-MEMBER");
-        http.logout().logoutSuccessUrl("/");
-
-        // CSRF tokens handling
-        http.addFilterAfter(new CsrfTokenResponseHeaderBindingForMammba(), CsrfFilter.class);
+        http.authorizeRequests()
+          .antMatchers("/init").anonymous()
+          .antMatchers("/mammba-user/getUser/*").hasAnyRole("MEMBER", "PARTNER", "ADMIN")
+          .and()
+          .formLogin().loginPage("/login")
+          .defaultSuccessUrl("/mammba-user/getUser/")
+          .and()
+          .csrf().csrfTokenRepository( new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository()));
     }
 
 }

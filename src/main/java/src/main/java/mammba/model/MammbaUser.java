@@ -20,7 +20,15 @@ public class MammbaUser{
 	protected String password;
 	protected String mobileNumber;
 	protected String emailAddress;
-   
+	protected String userType;
+
+    public String getUserType() {
+        return this.userType;
+    }
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
     public String getAddress1() {
         return this.address1;
     }

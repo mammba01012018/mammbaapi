@@ -5,8 +5,12 @@
  */
 package src.main.java.mammba.core.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 /**
@@ -40,5 +44,25 @@ public class ObjectUtility {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get the user role of the user login.
+	 *
+	 * @param authList                 GrantedAuthority reference.
+	 * @return                         List in string format.
+	 */
+	@SuppressWarnings("unchecked")
+    public List<String> getUserRoles(Collection<? extends GrantedAuthority> authList) {
+	    List<String> roleStrList = null;
+	    if (authList instanceof List<?>) {
+	        List<SimpleGrantedAuthority> roleList = (List<SimpleGrantedAuthority>) authList;
+	        roleStrList = new ArrayList<String>();
+	        for(SimpleGrantedAuthority sgAuth : roleList) {
+	            roleStrList.add(sgAuth.getAuthority());
+	        }
+	    }
+
+	    return roleStrList;
 	}
 }

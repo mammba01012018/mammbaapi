@@ -6,13 +6,16 @@
 package src.main.java.mammba.core.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import src.main.java.mammba.core.dao.UserDao;
+import src.main.java.mammba.core.dao.MammbaUserDao;
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.MammbaUserService;
+import src.main.java.mammba.core.util.ObjectUtility;
 import src.main.java.mammba.model.LoginModel;
+import src.main.java.mammba.model.MammbaUser;
 
 /**
  * Implements the MammbaUserService interface.
@@ -26,7 +29,11 @@ public class MammbaUserServiceImpl implements MammbaUserService {
     private static String ERR_ONE = "Invalid Mammba login";
 
     @Autowired
-    private UserDao userDao;
+    @Qualifier("userDao")
+    private MammbaUserDao userDao;
+
+    @Autowired
+    private ObjectUtility utility;
 
     /**
      * Checks and validates user credentials.
@@ -42,5 +49,19 @@ public class MammbaUserServiceImpl implements MammbaUserService {
         } catch(DaoException e) {
             throw new ServiceException(ERR_ONE);
         }
+    }
+
+    @Override
+    public String getUserType(String userName) throws ServiceException {
+        try {
+            MammbaUser user = this.userDao.getUserDetails(userName);
+            if (!this.utility.isNullOrEmpty(user)) {
+                return user.getUserType();
+            }
+        } catch(DaoException e) {
+            throw new ServiceException("Unable to acquire mammba user.");
+        }
+
+        return null;
     }
 }

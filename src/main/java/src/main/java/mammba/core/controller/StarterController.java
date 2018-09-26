@@ -5,28 +5,25 @@
  */
 package src.main.java.mammba.core.controller;
 
-import java.io.IOException;
+import java.util.List;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.UserService;
+import src.main.java.mammba.core.util.ObjectUtility;
 import src.main.java.mammba.model.Member;
+import src.main.java.mammba.model.Partner;
 
 /**
  * This class serves as the main controller of the basic restful functions.
@@ -38,80 +35,28 @@ import src.main.java.mammba.model.Member;
 public class StarterController {
 
 	@Autowired
-	@Qualifier(value="userMember")
+	@Qualifier(value="userMemberService")
 	private UserService userMemberService;
+
+	@Autowired
+    @Qualifier(value="userPartnerService")
+    private UserService userPartnerService;
+
+	@Autowired
+	private ObjectUtility utility;
 
 	private static final Logger LOGGER = Logger.getLogger(StarterController.class);
 
-    /**
-     * Initializes tokens and creates cookies.
-     *
-     * @param session           Session where to get token.
-     * @param response          Response reference.
-     * @throws IOException      Error in generating cookies.
-     */
-    @GetMapping(value= {"/init"})
-    public String initialize(HttpSession session, HttpServletResponse response) throws IOException {
-        CsrfToken token = (CsrfToken)
-          session.getAttribute("org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN");
-
-        if (token != null) {
-            LOGGER.info(session.getId() + " has logged in having: " + token.getToken());
-            Cookie cookie = new Cookie("code", token.getToken());
-            response.addCookie(cookie);
-            return token.getToken();
-        } else {
-            response.sendError(404);
-        }
-
-        return null;
-
-    }
-
-    /**
-     * Login session to the Mammba API.
-     *
-     * @param session           Session object.
-     */
-    @PostMapping(value = {"/login"})
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void login(HttpSession session) {
-        LOGGER.info(session.getId() + " has logged in.");
-
-    }
-
 	/**
-     * Logout session to the Mammba API.
-     *
-     * @param session           Session object.
-     */
-    @PostMapping(value = {"/mammba-user/logout"})
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(HttpSession session) {
-        LOGGER.info(session.getId() + " has logged out.");
-        session.invalidate();
-    }
-
-	/**
-	 * Registers a new Mammba user - member.
+	 * Get csrf token.
 	 *
-	 * @param member           Member reference from request.
-	 * @return                 ResponseEntity - bad request or success.
+	 * @param csrfToken        csrf token.
+	 * @return                 CsrfToken reference
 	 */
-	@PostMapping(value = { "/register" })
-	public ResponseEntity<?> registerNewMember(@RequestBody(required = true) Member member) {
-		LOGGER.info("registerNewMember()-start");
-		LOGGER.info(member);
-	    try {
-		    this.userMemberService.register(member);
-		} catch (ServiceException e) {
-			return ResponseEntity.badRequest()
-			        .body("MAMMBA[MC]-01-Exception occurred on register.");
-		}
-
-	    LOGGER.info("registerNewMember()-end");
-		return ResponseEntity.ok("MAMMBA[MC]-02-SUCCESS");
-	}
+    @GetMapping("/init")
+    public CsrfToken getCsrf(CsrfToken csrfToken) {
+        return csrfToken;
+    }
 
 	/**
      * Get Mammba user info details.
@@ -119,13 +64,33 @@ public class StarterController {
      * @param username         Member reference from request.
      * @return                 ResponseEntity - bad request or success.
      */
-    @PostMapping(value = { "/mammba-user" })
-    public ResponseEntity<?> getUserInfo(@RequestParam String username) {
+    @RequestMapping(value = "mammba-user/getUser/" )
+    public ResponseEntity<?> getUserInfo(HttpSession session) {
         LOGGER.info("getUserInfo()-start");
-        LOGGER.info(username);
+        String username = "";
+        try {
+            SecurityContextImpl userInfo = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
+            if (userInfo != null) {
+                username = (String) userInfo.getAuthentication().getPrincipal();
+                List<String> roleList =
+                        this.utility.getUserRoles(userInfo.getAuthentication().getAuthorities());
 
-        LOGGER.info("getUserInfo()-end");
-        return ResponseEntity.ok("MAMMBA[MC]-03-Got user details.");
+                if (roleList.contains("ROLE_MEMBER")) {
+                    Member member = (Member)this.userMemberService.getUserDetails(username);
+                    return ResponseEntity.ok(member);
+                } else if (roleList.contains("ROLE_PARTNER")) {
+                    Partner partner = (Partner)this.userPartnerService.getUserDetails(username);
+                    return ResponseEntity.ok(partner);
+                }
+
+            }
+        } catch (ServiceException e) {
+            LOGGER.error("Unable to get User details.", e);
+        }
+
+
+        return ResponseEntity.status(404).body("Invalid user details");
     }
+
 
 }

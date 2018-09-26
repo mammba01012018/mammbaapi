@@ -6,8 +6,9 @@
 package src.main.java;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -15,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import src.main.java.mammba.core.exception.ServiceException;
@@ -32,6 +34,8 @@ public class MammbaAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private MammbaUserService mammbaUserService;
+
+    private static final Logger LOGGER = Logger.getLogger(MammbaAuthenticationProvider.class);
 
 
     /**
@@ -51,29 +55,26 @@ public class MammbaAuthenticationProvider implements AuthenticationProvider {
 
         try {
             if (this.mammbaUserService.isLoginValid(model)) {
-                GrantedAuthority grantedAuth = new GrantedAuthority() {
+                List<GrantedAuthority> grantedAuthorities = null;
+                String role = this.mammbaUserService.getUserType(name);
 
-                    /**
-                     * Serial generated.
-                     */
-                    private static final long serialVersionUID = 1L;
+                if (role != null && ("member".equals(role) ||
+                                     "partner".equals(role) ||
+                                     "admin".equals(role))) {
+                    grantedAuthorities = new ArrayList<>();
+                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
 
-                    @Override
-                    public String getAuthority() {
-                        return "MAMMBA-MEMBER";
-                    }
-                };
-
-                Collection<GrantedAuthority> roles = new ArrayList<>();
-                roles.add(grantedAuth);
-                return new UsernamePasswordAuthenticationToken(
-                  name, password, roles);
+                    return new UsernamePasswordAuthenticationToken(
+                      name, password, grantedAuthorities);
+                } else {
+                    throw new AuthenticationCredentialsNotFoundException("MAMMBA[MAP]-01-Invalid Authorization.");
+                }
 
             } else {
-                throw new AuthenticationCredentialsNotFoundException("MAMMBA[MAP]-01-Invalid Authentication.");
+                throw new AuthenticationCredentialsNotFoundException("MAMMBA[MAP]-02-Invalid Authentication.");
             }
         } catch (ServiceException e) {
-            throw new AuthenticationCredentialsNotFoundException("MAMMBA[MAP]-02-Invalid Access.", e);
+            throw new AuthenticationCredentialsNotFoundException("MAMMBA[MAP]-03-Invalid Access.", e);
         }
     }
 

@@ -5,12 +5,9 @@
  */
 package src.main.java.mammba.core.dao;
 
-import java.sql.Date;
-
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.model.LoginModel;
-import src.main.java.mammba.model.Member;
-import src.main.java.mammba.model.Partner;
+import src.main.java.mammba.model.MammbaUser;
 
 /**
  * This interface will serve as the User functions.
@@ -18,7 +15,7 @@ import src.main.java.mammba.model.Partner;
  * @author Mardolfh Del Rosario
  *
  */
-public interface UserDao {
+public interface MammbaUserDao {
     /**
      * Checks the login into the database.
      *
@@ -27,22 +24,14 @@ public interface UserDao {
      */
 	boolean isLoginValid(LoginModel loginModel) throws DaoException;
 
-	/**
-     * Captures new member details.
-     *
-     * @param member                Member object reference.
-     * @return                      number of user inserted
-     */
-    int registerMember(Member member) throws DaoException;
-    
     /**
-     * Captures new partner details.
+     * Register new mammba user.
      *
-     * @param partner                Partner object reference.
-     * @return                      number of partner inserted
+     * @param MammbaUser            Member/Partner object reference.
+     * @return                      number of member/partner inserted
      */
-    int registerPartner(Partner partner) throws DaoException;
-    
+    int register(MammbaUser user) throws DaoException;
+
     /**
      * Add account details.
      *
@@ -58,12 +47,12 @@ public interface UserDao {
      */
     int addUserAcct(String username, String password, String email, String mobileNumber,
 			String userType, int memberId, int partnerId ) throws DaoException;
-    
+
     /**
-     * validates login details .
+     * Get user login details.
      *
-     * @param loginModel            LoginModel object reference.
-     * @return                      true/false.
+     * @param userName              Login username.
+     * @return                      MammbaUser - Partner/Member.
      */
-	boolean isUserValid(LoginModel loginModel) throws DaoException;
+	MammbaUser getUserDetails(String userName) throws DaoException;
 }

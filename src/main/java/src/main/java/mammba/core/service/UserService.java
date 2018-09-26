@@ -23,4 +23,13 @@ public interface UserService {
 	 * @throws ServiceException        business error logic.
 	 */
 	void register(MammbaUser mammbaUser) throws ServiceException;
+
+	/**
+	 * Get user details.
+	 *
+	 * @param username                 user name input.
+	 * @return                         MammbaUser reference (Member/Partner).
+	 * @throws ServiceException        business error logic.
+	 */
+	MammbaUser getUserDetails(String username) throws ServiceException;
 }
