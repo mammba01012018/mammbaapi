@@ -27,6 +27,9 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MammbaAuthenticationProvider authProvider;
 
+    @Autowired
+    private MammbaAccessDeniedHandler accessDeniedHandler;
+
     private static final Logger LOGGER = Logger.getLogger(MammbaSecurityConfig.class);
 
     /**
@@ -44,11 +47,15 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-          .antMatchers("/init", "/registerMember").anonymous()
+          .antMatchers("/init", "/registerMember", "/registerPartner", "/login", "/logout").permitAll()
           .antMatchers("/mammba-user/getUser/*").hasAnyRole("MEMBER", "PARTNER", "ADMIN")
+          .anyRequest().denyAll()
           .and()
-          .formLogin().loginPage("/login")
-          .defaultSuccessUrl("/mammba-user/getUser/")
+          .formLogin()
+              .defaultSuccessUrl("/mammba-user/getUser/")
+          .and()
+          .logout().permitAll().clearAuthentication(true)
+              .deleteCookies("JSESSIONID").invalidateHttpSession(true)
           .and()
           .csrf().csrfTokenRepository( new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository()));
     }

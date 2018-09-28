@@ -8,7 +8,7 @@ import java.sql.Date;
 
 /**
  * Getter setter for Partner data
- * 
+ *
  * @author Michelle Pancipane
  *
  */
@@ -30,10 +30,10 @@ public class Partner extends MammbaUser {
 	private String contactPersonMobileNum;
 	private String businessPermit;
 	private Date businessPermitExpiry;
-	private String DTI;
-	private String SEC;
-	
-	
+	private String dti;
+	private String sec;
+
+
 	public int getPartnerId() {
 		return partnerId;
 	}
@@ -130,20 +130,21 @@ public class Partner extends MammbaUser {
 	public void setBusinessPermitExpiry(Date businessPermitExpiry) {
 		this.businessPermitExpiry = businessPermitExpiry;
 	}
-	public String getDTI() {
-		return DTI;
-	}
-	public void setDTI(String dTI) {
-		DTI = dTI;
-	}
-	public String getSEC() {
-		return SEC;
-	}
-	public void setSEC(String sEC) {
-		SEC = sEC;
-	}
-	
-	@Override
+
+
+	public String getDti() {
+        return this.dti;
+    }
+    public void setDti(String dti) {
+        this.dti = dti;
+    }
+    public String getSec() {
+        return this.sec;
+    }
+    public void setSec(String sec) {
+        this.sec = sec;
+    }
+    @Override
 	public String toString() {
 		return "Partner [partnerId=" + partnerId + ", partnerName=" + partnerName + ", iataNumber=" + iataNumber
 				+ ", companyName=" + companyName + ", telNumber=" + telNumber + ", fax=" + fax + ", numOfStaff="
@@ -151,7 +152,7 @@ public class Partner extends MammbaUser {
 				+ typeOfService + ", contactPersonName=" + contactPersonName + ", contactPersonPosition="
 				+ contactPersonPosition + ", contactPersonTelNum=" + contactPersonTelNum + ", contactPersonMobileNum="
 				+ contactPersonMobileNum + ", businessPermit=" + businessPermit + ", businessPermitExpiry="
-				+ businessPermitExpiry + ", DTI=" + DTI + ", SEC=" + SEC + ", province=" + province + ", address1="
+				+ businessPermitExpiry + ", DTI=" + dti + ", SEC=" + sec + ", province=" + province + ", address1="
 				+ address1 + ", country=" + country + ", username=" + username + ", password=" + password
 				+ ", mobileNumber=" + mobileNumber + ", emailAddress=" + emailAddress + "]";
 	}

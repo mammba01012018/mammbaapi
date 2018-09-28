@@ -59,6 +59,16 @@ public class StarterController {
         return csrfToken;
     }
 
+    /**
+     * Logout.
+     *
+     * @return                 Logout message.
+     */
+    @GetMapping("/logout")
+    public String logout() {
+        return "Successfully logged out.";
+    }
+
 	/**
      * Get Mammba user info details.
      *
@@ -101,16 +111,36 @@ public class StarterController {
      */
     @RequestMapping(value = "registerMember" )
     public ResponseEntity<?> register(@RequestBody Member member) {
-        LOGGER.info("register()-start");
+        LOGGER.info("register(member)-start");
         try {
             this.userMemberService.register(member);
-            ResponseEntity.ok().body("Successfully registered user: " + member.getUsername());
+            return ResponseEntity.ok().body("Successfully registered member: " + member.getUsername());
         } catch (ServiceException e) {
             LOGGER.error("Error registering Member.", e);
         }
 
-        LOGGER.info("register()-end");
-        return ResponseEntity.status(404).body("Unable to register user.");
+        LOGGER.info("register(member)-end");
+        return ResponseEntity.status(404).body("Unable to register member.");
+    }
+
+    /**
+     * Register new partner.
+     *
+     * @param partner          Member reference from UI.
+     * @return                 ResponseEntity - bad request or success.
+     */
+    @RequestMapping(value = "registerPartner" )
+    public ResponseEntity<?> register(@RequestBody Partner partner) {
+        LOGGER.info("register(partner)-start");
+        try {
+            this.userPartnerService.register(partner);
+            return ResponseEntity.ok().body("Successfully registered partner: " + partner.getUsername());
+        } catch (ServiceException e) {
+            LOGGER.error("Error registering Partner.", e);
+        }
+
+        LOGGER.info("register(partner)-end");
+        return ResponseEntity.status(404).body("Unable to register partner.");
     }
 
 

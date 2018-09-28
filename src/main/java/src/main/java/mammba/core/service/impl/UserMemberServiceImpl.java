@@ -87,7 +87,8 @@ public class UserMemberServiceImpl implements UserService {
             //!this.objectUtility.isNullOrEmpty(member.getAddress2()) &&
             !this.objectUtility.isNullOrEmpty(member.getProvince()) &&
             !this.objectUtility.isNullOrEmpty(member.getCountry()) &&
-            !this.objectUtility.isNullOrEmpty(member.getGender())) {
+            !this.objectUtility.isNullOrEmpty(member.getGender()) &&
+            !this.objectUtility.isNullOrEmpty(member.getBirthDate())) {
 
             isMemberValidated = true;
         }
