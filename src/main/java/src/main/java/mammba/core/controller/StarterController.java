@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -90,6 +91,26 @@ public class StarterController {
 
 
         return ResponseEntity.status(404).body("Invalid user details");
+    }
+
+    /**
+     * Register new member.
+     *
+     * @param member           Member reference from UI.
+     * @return                 ResponseEntity - bad request or success.
+     */
+    @RequestMapping(value = "registerMember" )
+    public ResponseEntity<?> register(@RequestBody Member member) {
+        LOGGER.info("register()-start");
+        try {
+            this.userMemberService.register(member);
+            ResponseEntity.ok().body("Successfully registered user: " + member.getUsername());
+        } catch (ServiceException e) {
+            LOGGER.error("Error registering Member.", e);
+        }
+
+        LOGGER.info("register()-end");
+        return ResponseEntity.status(404).body("Unable to register user.");
     }
 
 

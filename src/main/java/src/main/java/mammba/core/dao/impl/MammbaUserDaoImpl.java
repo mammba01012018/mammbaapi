@@ -103,6 +103,7 @@ public class MammbaUserDaoImpl implements MammbaUserDao {
 
 		try {
 			java.sql.Date dateTime = new java.sql.Date(new java.util.Date().getTime());
+			String sql = this.queryManager.getQuery("addUserAcct");
     		Map<String, Object> paramMap = new HashMap<String, Object>();
     		paramMap.put("username", username);
             paramMap.put("password", password);
@@ -112,9 +113,9 @@ public class MammbaUserDaoImpl implements MammbaUserDao {
             paramMap.put("userType", userType);
             paramMap.put("memberId", memberId);
             paramMap.put("partnerId", partnerId);
-            return this.namedParameterJdbcTemplate.update("addUserAcct", paramMap);
-    	} catch (DataAccessException e) {
-    		LOGGER.error("registerMember()-exception");
+            return this.namedParameterJdbcTemplate.update(sql, paramMap);
+    	} catch (DataAccessException | SQLException e) {
+    		LOGGER.error("registerMember()-exception", e);
 			throw new DaoException("MAMMBA[UDI]-01-Database error");
     	}
 	}

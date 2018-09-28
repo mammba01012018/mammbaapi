@@ -5,6 +5,8 @@
  */
 package src.main.java.mammba.model;
 
+import java.util.Date;
+
 /**
  * Getter setter for Member user data.
  *
@@ -13,15 +15,18 @@ package src.main.java.mammba.model;
  */
 public class Member extends MammbaUser {
 
+    private int memberId;
 	private String firstName;
 	private String lastName;
 	private String middleInitial;
 	private String gender;
 	private String address2;
+	private String rate;
+	private Date birthDate;
 	protected String province;
     protected String country;
-	private String rate;
-	private int memberId;
+
+
 
 	public String getFirstName() {
         return this.firstName;
@@ -58,11 +63,11 @@ public class Member extends MammbaUser {
     public String getAddress2() {
         return this.address2;
     }
-    
+
     public void setAddress2(String address2) {
         this.address2 = address2;
     }
-    
+
     public String getRate() {
         return this.rate;
     }
@@ -70,16 +75,24 @@ public class Member extends MammbaUser {
     public void setRate(String rate) {
         this.rate = rate;
     }
-    
+
     public int getMemberId() {
         return this.memberId;
     }
-    
+
     public void setMemberId(int memberId) {
         this.memberId = memberId;
     }
 
-	@Override
+	public Date getBirthDate() {
+        return this.birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    @Override
 	public String toString() {
 		return "Member [firstName=" + firstName + ", lastName=" + lastName + ", middleInitial=" + middleInitial
 				+ ", gender=" + gender + ", address2=" + address2 + ", province=" + province + ", country=" + country

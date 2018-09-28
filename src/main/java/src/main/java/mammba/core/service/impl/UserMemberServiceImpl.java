@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import src.main.java.mammba.core.dao.MammbaUserDao;
+import src.main.java.mammba.core.dao.impl.MemberDaoImpl;
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.UserService;
@@ -75,10 +76,15 @@ public class UserMemberServiceImpl implements UserService {
 	    boolean isMemberValidated = false;
 
 	    //check required fields
-        if (!this.objectUtility.isNullOrEmpty(member.getFirstName()) &&
+        if (!this.objectUtility.isNullOrEmpty(member.getUsername()) &&
+            !this.objectUtility.isNullOrEmpty(member.getPassword()) &&
+            !this.objectUtility.isNullOrEmpty(member.getMobileNumber()) &&
+            !this.objectUtility.isNullOrEmpty(member.getEmailAddress()) &&
+            !this.objectUtility.isNullOrEmpty(member.getFirstName()) &&
             !this.objectUtility.isNullOrEmpty(member.getLastName()) &&
             !this.objectUtility.isNullOrEmpty(member.getMiddleInitial()) &&
             !this.objectUtility.isNullOrEmpty(member.getAddress1()) &&
+            //!this.objectUtility.isNullOrEmpty(member.getAddress2()) &&
             !this.objectUtility.isNullOrEmpty(member.getProvince()) &&
             !this.objectUtility.isNullOrEmpty(member.getCountry()) &&
             !this.objectUtility.isNullOrEmpty(member.getGender())) {
@@ -87,7 +93,13 @@ public class UserMemberServiceImpl implements UserService {
         }
 
         if (isMemberValidated) {
-            //this.userDao.registerMember(member);
+            MemberDaoImpl userMemberDao = null;
+            userMemberDao = (MemberDaoImpl) this.userDao;
+
+            int memberId = userMemberDao.register(member);
+            userMemberDao.addUserAcct(member.getUsername(), member.getPassword(), member.getEmailAddress(),
+                    member.getMobileNumber(), "member", memberId, 0);
+
         } else {
             LOGGER.error(ERR_FOUR);
             throw new ServiceException(ERR_FOUR);
@@ -111,8 +123,6 @@ public class UserMemberServiceImpl implements UserService {
         } catch(DaoException e) {
             throw new ServiceException(ERR_FIVE);
         }
-
-
         return null;
     }
 

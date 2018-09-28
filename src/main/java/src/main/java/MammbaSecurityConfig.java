@@ -44,7 +44,7 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-          .antMatchers("/init").anonymous()
+          .antMatchers("/init", "/registerMember").anonymous()
           .antMatchers("/mammba-user/getUser/*").hasAnyRole("MEMBER", "PARTNER", "ADMIN")
           .and()
           .formLogin().loginPage("/login")

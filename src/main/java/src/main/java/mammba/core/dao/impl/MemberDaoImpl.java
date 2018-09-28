@@ -7,14 +7,15 @@ package src.main.java.mammba.core.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import src.main.java.mammba.core.exception.DaoException;
@@ -59,20 +60,26 @@ public class MemberDaoImpl extends MammbaUserDaoImpl {
     public int register(MammbaUser user) throws DaoException {
         try {
             Member member = (Member) user;
-            Map<String, Object> paramMap = new HashMap<String, Object>();
-            paramMap.put("firstName", member.getFirstName());
-            paramMap.put("lastName", member.getLastName());
-            paramMap.put("middleInitial", member.getMiddleInitial());
-            paramMap.put("gender", member.getGender());
-            paramMap.put("address1", member.getAddress1());
-            paramMap.put("address2", member.getAddress2());
-            paramMap.put("province", member.getProvince());
-            paramMap.put("country", member.getCountry());
-            paramMap.put("emailAddress", member.getEmailAddress());
-            paramMap.put("mobileNumber", member.getMobileNumber());
-            return this.namedParameterJdbcTemplate.update("registerMember", paramMap);
-        } catch (DataAccessException e) {
-            LOGGER.error("registerMember()-exception");
+            KeyHolder holder = new GeneratedKeyHolder();
+            String sql = this.queryManager.getQuery("registerMember");
+            SqlParameterSource parameters = new MapSqlParameterSource()
+                    .addValue("firstName", member.getFirstName())
+                    .addValue("lastName", member.getLastName())
+                    .addValue("middleInitial", member.getMiddleInitial())
+                    .addValue("gender", member.getGender())
+                    .addValue("address1", member.getAddress1())
+                    .addValue("address2", member.getAddress2())
+                    .addValue("province", member.getProvince())
+                    .addValue("country", member.getCountry())
+                    .addValue("emailAddress", member.getEmailAddress())
+                    .addValue("mobileNumber", member.getMobileNumber())
+                    .addValue("birthdate", member.getBirthDate());
+
+           this.namedParameterJdbcTemplate.update(sql, parameters, holder);
+
+           return holder.getKey().intValue();
+        } catch (DataAccessException | SQLException e) {
+            LOGGER.error("registerMember(Member)-exception", e);
             throw new DaoException("MAMMBA[RM]-01-Database error");
         }
 
