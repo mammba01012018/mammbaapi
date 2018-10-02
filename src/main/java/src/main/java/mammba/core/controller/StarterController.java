@@ -13,9 +13,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,13 +71,24 @@ public class StarterController {
         return "Successfully logged out.";
     }
 
+    /**
+     * Unauthenticated user.
+     *
+     * @return                 Access is denied message.
+     */
+    @PostMapping("/deniedAccess")
+    public ResponseEntity<?> deniedAccess() {
+        return ResponseEntity.status(403).body("Access is denied.");
+    }
+
 	/**
      * Get Mammba user info details.
      *
      * @param username         Member reference from request.
      * @return                 ResponseEntity - bad request or success.
      */
-    @RequestMapping(value = "mammba-user/getUser/" )
+    @RequestMapping(value = "/mammba-user/getUser/" )
+    @Secured({"ROLE_MEMBER", "ROLE_PARTNER"})
     public ResponseEntity<?> getUserInfo(HttpSession session) {
         LOGGER.info("getUserInfo()-start");
         String username = "";

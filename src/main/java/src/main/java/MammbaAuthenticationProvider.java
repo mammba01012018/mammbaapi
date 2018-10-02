@@ -58,12 +58,13 @@ public class MammbaAuthenticationProvider implements AuthenticationProvider {
                 List<GrantedAuthority> grantedAuthorities = null;
                 String role = this.mammbaUserService.getUserType(name);
 
+
                 if (role != null && ("member".equals(role) ||
                                      "partner".equals(role) ||
                                      "admin".equals(role))) {
                     grantedAuthorities = new ArrayList<>();
                     grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
-
+                    LOGGER.info("User is " + grantedAuthorities.get(0).getAuthority() );
                     return new UsernamePasswordAuthenticationToken(
                       name, password, grantedAuthorities);
                 } else {

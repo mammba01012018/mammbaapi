@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 /**
@@ -27,8 +28,6 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MammbaAuthenticationProvider authProvider;
 
-    @Autowired
-    private MammbaAccessDeniedHandler accessDeniedHandler;
 
     private static final Logger LOGGER = Logger.getLogger(MammbaSecurityConfig.class);
 
@@ -47,15 +46,17 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-          .antMatchers("/init", "/registerMember", "/registerPartner", "/login", "/logout").permitAll()
-          .antMatchers("/mammba-user/getUser/*").hasAnyRole("MEMBER", "PARTNER", "ADMIN")
+          .antMatchers("/init", "/registerMember", "/registerPartner", "/login", "/logout", "/deniedAccess").permitAll()
+          .antMatchers("/mammba-user/**").hasAnyRole("MEMBER", "PARTNER", "ADMIN")
           .anyRequest().denyAll()
           .and()
           .formLogin()
               .defaultSuccessUrl("/mammba-user/getUser/")
+              .failureForwardUrl("/deniedAccess")
           .and()
           .logout().permitAll().clearAuthentication(true)
               .deleteCookies("JSESSIONID").invalidateHttpSession(true)
+              .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/init")
           .and()
           .csrf().csrfTokenRepository( new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository()));
     }
