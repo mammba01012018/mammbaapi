@@ -40,16 +40,18 @@ configurations {
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web',
-		'org.springframework.boot:spring-boot-starter-jdbc',
-		'org.springframework:spring-jdbc',
-		'mysql:mysql-connector-java:5.1.22',
-		'org.springframework.boot:spring-boot-starter-security',
-		'commons-validator:commons-validator:1.4.0'
+	compile(  'org.springframework.boot:spring-boot-starter-web',
+		      'org.springframework.boot:spring-boot-starter-jdbc',
+		      'org.springframework:spring-jdbc',
+		      'mysql:mysql-connector-java:5.1.22',
+		      'org.springframework.boot:spring-boot-starter-security',
+		      'commons-validator:commons-validator:1.4.0',
+		      'org.json:json:20180813'
 		)
 		
 		
-	providedCompile 'org.apache.tomcat.embed:tomcat-embed-jasper',
+	providedCompile
+	    'org.apache.tomcat.embed:tomcat-embed-jasper',
 		'org.apache.tomcat:tomcat-juli:7.0.90',
 		'org.springframework.boot:spring-boot-starter-tomcat',
 		'org.eclipse.jdt.core.compiler:ecj:4.6.1'
