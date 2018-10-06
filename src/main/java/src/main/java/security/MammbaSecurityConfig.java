@@ -3,7 +3,7 @@
  * 2018 All rights reserved.
  *
  */
-package src.main.java;
+package src.main.java.security;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 /**
@@ -27,6 +26,18 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MammbaAuthenticationProvider authProvider;
+
+    @Autowired
+    private MammbaEntryPointHandler authEntryPoint;
+
+    @Autowired
+    private MammbaAuthSuccessHandler authSuccessHandler;
+
+    @Autowired
+    private MammbaAuthenticationFailureHandler authFailureHandler;
+
+    @Autowired
+    private MammbaAuthenticationLogoutSuccessHandler authLogoutHandler;
 
 
     private static final Logger LOGGER = Logger.getLogger(MammbaSecurityConfig.class);
@@ -46,20 +57,28 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-          .antMatchers("/init", "/registerMember", "/registerPartner", "/login", "/logout", "/deniedAccess").permitAll()
+          .antMatchers("/registerMember", "/registerPartner", "/login", "/logout").permitAll()
           .antMatchers("/mammba-user/**").hasAnyRole("MEMBER", "PARTNER", "ADMIN")
           .anyRequest().denyAll()
           .and()
-          .formLogin()
-              .defaultSuccessUrl("/mammba-user/getUser/")
-              .failureForwardUrl("/deniedAccess")
+          .exceptionHandling()
+              .authenticationEntryPoint(this.authEntryPoint)
           .and()
-          .logout().permitAll().clearAuthentication(true)
-              .deleteCookies("JSESSIONID").invalidateHttpSession(true)
-              .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/logoutMammba")
+          .formLogin()
+              .loginProcessingUrl("/login")
+              .loginPage("/").permitAll()
+              .successHandler(this.authSuccessHandler)
+              .failureHandler(this.authFailureHandler)
+          .and()
+          .logout()
+              .logoutUrl("/logout")
+              .deleteCookies("JSESSIONID")
+              .invalidateHttpSession(true)
+              .logoutSuccessHandler(this.authLogoutHandler)
           .and()
           .csrf().csrfTokenRepository(
-               new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository())).ignoringAntMatchers("/login");
+               new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository()))
+              .ignoringAntMatchers("/registerMember", "/registerPartner", "/login", "/logout");
     }
 
 }

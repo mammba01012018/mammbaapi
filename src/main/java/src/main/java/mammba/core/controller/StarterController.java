@@ -5,26 +5,19 @@
  */
 package src.main.java.mammba.core.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.UserService;
-import src.main.java.mammba.core.util.ObjectUtility;
 import src.main.java.mammba.model.Member;
 import src.main.java.mammba.model.Partner;
 
@@ -45,76 +38,10 @@ public class StarterController {
     @Qualifier(value="userPartnerService")
     private UserService userPartnerService;
 
-	@Autowired
-	private ObjectUtility utility;
+
 
 	private static final Logger LOGGER = Logger.getLogger(StarterController.class);
 
-	/**
-	 * Get csrf token.
-	 *
-	 * @param csrfToken        csrf token.
-	 * @return                 CsrfToken reference
-	 */
-    @GetMapping("/init")
-    public CsrfToken getCsrf(CsrfToken csrfToken) {
-        return csrfToken;
-    }
-
-    /**
-     * Logout.
-     *
-     * @return                 Logout message.
-     */
-    @GetMapping("/logoutMammba")
-    public String logout() {
-        return "Successfully logged out.";
-    }
-
-    /**
-     * Unauthenticated user.
-     *
-     * @return                 Access is denied message.
-     */
-    @PostMapping("/deniedAccess")
-    public ResponseEntity<?> deniedAccess() {
-        return ResponseEntity.status(403).body("Access is denied.");
-    }
-
-	/**
-     * Get Mammba user info details.
-     *
-     * @param username         Member reference from request.
-     * @return                 ResponseEntity - bad request or success.
-     */
-    @RequestMapping(value = "/mammba-user/getUser/" )
-    @Secured({"ROLE_MEMBER", "ROLE_PARTNER"})
-    public ResponseEntity<?> getUserInfo(HttpSession session) {
-        LOGGER.info("getUserInfo()-start");
-        String username = "";
-        try {
-            SecurityContextImpl userInfo = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
-            if (userInfo != null) {
-                username = (String) userInfo.getAuthentication().getPrincipal();
-                List<String> roleList =
-                        this.utility.getUserRoles(userInfo.getAuthentication().getAuthorities());
-
-                if (roleList.contains("ROLE_MEMBER")) {
-                    Member member = (Member)this.userMemberService.getUserDetails(username);
-                    return ResponseEntity.ok(member);
-                } else if (roleList.contains("ROLE_PARTNER")) {
-                    Partner partner = (Partner)this.userPartnerService.getUserDetails(username);
-                    return ResponseEntity.ok(partner);
-                }
-
-            }
-        } catch (ServiceException e) {
-            LOGGER.error("Unable to get User details.", e);
-        }
-
-
-        return ResponseEntity.status(404).body("Invalid user details");
-    }
 
     /**
      * Register new member.
@@ -122,7 +49,7 @@ public class StarterController {
      * @param member           Member reference from UI.
      * @return                 ResponseEntity - bad request or success.
      */
-    @RequestMapping(value = "registerMember" )
+    @PostMapping("registerMember")
     public ResponseEntity<?> register(@RequestBody Member member) {
         LOGGER.info("register(member)-start");
         try {
@@ -142,7 +69,7 @@ public class StarterController {
      * @param partner          Member reference from UI.
      * @return                 ResponseEntity - bad request or success.
      */
-    @RequestMapping(value = "registerPartner" )
+    @PostMapping("registerPartner")
     public ResponseEntity<?> register(@RequestBody Partner partner) {
         LOGGER.info("register(partner)-start");
         try {
@@ -154,6 +81,19 @@ public class StarterController {
 
         LOGGER.info("register(partner)-end");
         return ResponseEntity.status(404).body("Unable to register partner.");
+    }
+
+    /**
+     * Test to determine if user is allowed to get in.
+     * @param session
+     * @return
+     */
+    @PostMapping("/mammba-user/loginDetails")
+    public ResponseEntity<?> loginDetails(HttpSession session) {
+
+        SecurityContextImpl userInfo = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
+        return ResponseEntity.ok().body("User is currently login: " +
+                (String) userInfo.getAuthentication().getPrincipal());
     }
 
 

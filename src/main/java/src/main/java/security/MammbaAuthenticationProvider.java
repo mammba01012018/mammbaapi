@@ -3,7 +3,7 @@
  * 2018 All rights reserved.
  *
  */
-package src.main.java;
+package src.main.java.security;
 
 import java.util.ArrayList;
 import java.util.List;

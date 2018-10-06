@@ -11,7 +11,7 @@ package src.main.java.mammba.model;
  * @author Michelle Pancipane / Mardolfh Del Rosario
  *
  */
-public class MammbaUser{
+public class MammbaUser {
 
     protected String province;
     protected String address1;
@@ -21,6 +21,7 @@ public class MammbaUser{
 	protected String mobileNumber;
 	protected String emailAddress;
 	protected String userType;
+
 
     public String getUserType() {
         return this.userType;
@@ -47,13 +48,15 @@ public class MammbaUser{
     public void setCountry(String country) {
         this.country = country;
     }
-	public String getUsername() {
+
+    public String getUsername() {
 		return username;
 	}
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getPassword() {
+
+    public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {

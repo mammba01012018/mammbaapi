@@ -5,6 +5,9 @@
 package src.main.java.mammba.model;
 
 import java.sql.Date;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * Getter setter for Partner data
@@ -14,7 +17,7 @@ import java.sql.Date;
  */
 public class Partner extends MammbaUser {
 
-	private int partnerId;
+    private int partnerId;
 	private String partnerName;
 	private String iataNumber;
 	private String companyName;
