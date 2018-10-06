@@ -58,7 +58,8 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
               .deleteCookies("JSESSIONID").invalidateHttpSession(true)
               .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/init")
           .and()
-          .csrf().csrfTokenRepository( new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository()));
+          .csrf().csrfTokenRepository(
+               new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository())).ignoringAntMatchers("/login");
     }
 
 }
