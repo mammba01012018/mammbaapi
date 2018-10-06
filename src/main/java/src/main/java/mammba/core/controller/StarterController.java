@@ -66,7 +66,7 @@ public class StarterController {
      *
      * @return                 Logout message.
      */
-    @GetMapping("/logout")
+    @GetMapping("/logoutMammba")
     public String logout() {
         return "Successfully logged out.";
     }
