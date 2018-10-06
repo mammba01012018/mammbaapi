@@ -50,12 +50,12 @@ dependencies {
 		)
 		
 		
-	providedCompile
+	providedCompile (
 	    'org.apache.tomcat.embed:tomcat-embed-jasper',
 		'org.apache.tomcat:tomcat-juli:7.0.90',
 		'org.springframework.boot:spring-boot-starter-tomcat',
 		'org.eclipse.jdt.core.compiler:ecj:4.6.1'
-		
+    )
 	
 	
 	
