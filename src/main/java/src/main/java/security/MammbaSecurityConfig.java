@@ -5,14 +5,20 @@
  */
 package src.main.java.security;
 
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 /**
@@ -78,8 +84,23 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
           .and()
           .csrf().csrfTokenRepository(
                new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository()))
-              .ignoringAntMatchers("/registerMember", "/registerPartner", "/login", "/logout");
+              .ignoringAntMatchers("/registerMember", "/registerPartner", "/login", "/logout")
+          .and()
+              .cors().configurationSource(this.corsConfigurationSource());
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.addAllowedHeader("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+
 
 }
 
