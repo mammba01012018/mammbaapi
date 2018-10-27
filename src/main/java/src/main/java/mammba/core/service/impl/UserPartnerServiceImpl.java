@@ -8,6 +8,8 @@ package src.main.java.mammba.core.service.impl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import src.main.java.mammba.core.dao.MammbaUserDao;
@@ -104,6 +106,10 @@ public class UserPartnerServiceImpl implements UserService {
         if (isPartnerValidated) {
             PartnerDaoImpl userPartnerDao = null;
             userPartnerDao = (PartnerDaoImpl) this.userDao;
+            
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(partner.getPassword());
+            partner.setPassword(hashedPassword);
 
             int partnerId = userPartnerDao.register(partner);
             userPartnerDao.addUserAcct(partner.getUsername(), partner.getPassword(), partner.getEmailAddress(),

@@ -8,6 +8,8 @@ package src.main.java.mammba.core.service.impl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import src.main.java.mammba.core.dao.MammbaUserDao;
@@ -28,54 +30,54 @@ import src.main.java.mammba.model.Member;
 @Service("userMemberService")
 public class UserMemberServiceImpl implements UserService {
 
-	@Autowired
-	private ObjectUtility objectUtility;
+    @Autowired
+    private ObjectUtility objectUtility;
 
-	@Autowired
-	@Qualifier("userMemberDao")
-	private MammbaUserDao userDao;
+    @Autowired
+    @Qualifier("userMemberDao")
+    private MammbaUserDao userDao;
 
-	private static final Logger LOGGER = Logger.getLogger(UserMemberServiceImpl.class);
-	private static String ERR_ONE = "No user type exists.";
-	private static String ERR_TWO = "Member cannot be null";
-	private static String ERR_THREE = "Error register Mammba User";
-	private static String ERR_FOUR = "Member has incomplete details.";
-	private static String ERR_FIVE = "Unable to get Member details.";
+    private static final Logger LOGGER = Logger.getLogger(UserMemberServiceImpl.class);
+    private static String ERR_ONE = "No user type exists.";
+    private static String ERR_TWO = "Member cannot be null";
+    private static String ERR_THREE = "Error register Mammba User";
+    private static String ERR_FOUR = "Member has incomplete details.";
+    private static String ERR_FIVE = "Unable to get Member details.";
 
 
-	@Override
-	public void register(MammbaUser mammbaUser) throws ServiceException {
+    @Override
+    public void register(MammbaUser mammbaUser) throws ServiceException {
 
-		try {
-			if (mammbaUser != null) {
-			    if (mammbaUser instanceof Member) {
-			        this.registerMember((Member) mammbaUser);
-			    } else {
-			        LOGGER.error(ERR_ONE);
-			        throw new ServiceException(ERR_ONE);
-			    }
+        try {
+            if (mammbaUser != null) {
+                if (mammbaUser instanceof Member) {
+                    this.registerMember((Member) mammbaUser);
+                } else {
+                    LOGGER.error(ERR_ONE);
+                    throw new ServiceException(ERR_ONE);
+                }
 
-			} else {
-			    LOGGER.error(ERR_TWO);
-				throw new ServiceException(ERR_TWO);
-			}
-		} catch (DaoException e) {
-		    LOGGER.error(ERR_THREE);
-			throw new ServiceException(ERR_THREE);
-		}
-	}
+            } else {
+                LOGGER.error(ERR_TWO);
+                throw new ServiceException(ERR_TWO);
+            }
+        } catch (DaoException e) {
+            LOGGER.error(ERR_THREE);
+            throw new ServiceException(ERR_THREE);
+        }
+    }
 
-	/**
-	 * Registers the new Member.
-	 *
-	 * @param member                       Member reference object.
-	 * @throws DaoException                Database error.
-	 * @throws ServiceException            Business logic error.
-	 */
-	private void registerMember(Member member) throws DaoException, ServiceException {
-	    boolean isMemberValidated = false;
+    /**
+     * Registers the new Member.
+     *
+     * @param member                       Member reference object.
+     * @throws DaoException                Database error.
+     * @throws ServiceException            Business logic error.
+     */
+    private void registerMember(Member member) throws DaoException, ServiceException {
+        boolean isMemberValidated = false;
 
-	    //check required fields
+        //check required fields
         if (!this.objectUtility.isNullOrEmpty(member.getUsername()) &&
             !this.objectUtility.isNullOrEmpty(member.getPassword()) &&
             !this.objectUtility.isNullOrEmpty(member.getMobileNumber()) &&
@@ -97,6 +99,10 @@ public class UserMemberServiceImpl implements UserService {
             MemberDaoImpl userMemberDao = null;
             userMemberDao = (MemberDaoImpl) this.userDao;
 
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(member.getPassword());
+            member.setPassword(hashedPassword);
+
             int memberId = userMemberDao.register(member);
             userMemberDao.addUserAcct(member.getUsername(), member.getPassword(), member.getEmailAddress(),
                     member.getMobileNumber(), "member", memberId, 0);
@@ -106,7 +112,7 @@ public class UserMemberServiceImpl implements UserService {
             throw new ServiceException(ERR_FOUR);
         }
 
-	}
+    }
 
     @Override
     public Member getUserDetails(String username) throws ServiceException {
