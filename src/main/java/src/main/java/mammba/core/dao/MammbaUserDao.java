@@ -55,4 +55,41 @@ public interface MammbaUserDao {
      * @return                      MammbaUser - Partner/Member.
      */
 	MammbaUser getUserDetails(String userName) throws DaoException;
+
+	/**
+     * validates if username exists.
+     *
+     * @param userName             user name to validate.
+     * @return                     true/false
+     * @throws DaoException        Db error.
+     */
+    boolean isUserNameExist(String userName) throws DaoException;
+
+    /**
+     * validates if email exists.
+     *
+     * @param email               email to validate.
+     * @param userId               if > 0 then make an exception
+     * @return                     true/false
+     * @throws DaoException        Db error.
+     */
+    boolean isEmailExist(String email, int userId) throws DaoException;
+
+    /**
+     * validates if mobile number exists.
+     *
+     * @param mobileNum            mobile number to validate.
+     * @param userId               if > 0 then make an exception
+     * @return                     true/false
+     * @throws DaoException        Db error.
+     */
+    boolean isMobileNoExist(String mobileNum, int userId) throws DaoException;
+
+    /**
+     * Update an existing mammba user.
+     *
+     * @param MammbaUser            Member/Partner object reference.
+     * @return                      number of member/partner inserted
+     */
+    int update(MammbaUser user) throws DaoException;
 }

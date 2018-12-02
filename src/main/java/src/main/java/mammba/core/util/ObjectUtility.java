@@ -41,7 +41,12 @@ public class ObjectUtility {
 			if (list.isEmpty()) {
 				return true;
 			}
-		}
+		}  else if (o != null && o instanceof Long) {
+            Long lo = (Long) o;
+            if (lo.equals(Long.valueOf(0))) {
+                return true;
+            }
+        }
 
 		return false;
 	}

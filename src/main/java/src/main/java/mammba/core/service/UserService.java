@@ -32,4 +32,12 @@ public interface UserService {
 	 * @throws ServiceException        business error logic.
 	 */
 	MammbaUser getUserDetails(String username) throws ServiceException;
+
+	/**
+     * Register a Mammbauser.
+     *
+     * @param mammbaUser               Could be any mammba user.
+     * @throws ServiceException        business error logic.
+     */
+    void updateUser(MammbaUser mammbaUser) throws ServiceException;
 }

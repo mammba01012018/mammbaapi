@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.model.MammbaUser;
@@ -36,6 +37,7 @@ public class MemberDaoImpl extends MammbaUserDaoImpl {
         @Override
         public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
             Member member = new Member();
+            member.setUserId(rs.getInt("user_id"));
             member.setUsername(rs.getString("user_userName"));
             member.setPassword(rs.getString("user_password"));
             member.setEmailAddress(rs.getString("user_email"));
@@ -103,5 +105,42 @@ public class MemberDaoImpl extends MammbaUserDaoImpl {
         }
 
         return null;
+    }
+
+    @Override
+    @Transactional
+    public int update(MammbaUser user) throws DaoException {
+        try {
+            Member member = (Member) user;
+            String sql0 = this.queryManager.getQuery("updateUser");
+            SqlParameterSource parameters = new MapSqlParameterSource()
+                    .addValue("emailAddress", member.getEmailAddress())
+                    .addValue("mobileNumber", member.getMobileNumber())
+                    .addValue("password", member.getPassword())
+                    .addValue("memberId", member.getMemberId());
+
+            //Updates USER table
+            int result = this.namedParameterJdbcTemplate.update(sql0, parameters);
+            LOGGER.info("Update user table: " + result);
+
+            String sql1 = this.queryManager.getQuery("updateMember");
+            parameters = new MapSqlParameterSource()
+                    .addValue("firstName", member.getFirstName())
+                    .addValue("lastName", member.getLastName())
+                    .addValue("middleInitial", member.getMiddleInitial())
+                    .addValue("address1", member.getAddress1())
+                    .addValue("emailAddress", member.getEmailAddress())
+                    .addValue("mobileNumber", member.getMobileNumber())
+                    .addValue("memberId", member.getMemberId());
+
+           //Updates MEMBER table
+           this.namedParameterJdbcTemplate.update(sql1, parameters);
+           LOGGER.info("Update member table");
+
+           return member.getUserId();
+        } catch (DataAccessException | SQLException e) {
+            LOGGER.error("updateMember(Member)-exception", e);
+            throw new DaoException("MAMMBA[RM]-01-Database error");
+        }
     }
 }

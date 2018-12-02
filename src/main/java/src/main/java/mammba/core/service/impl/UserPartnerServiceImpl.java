@@ -106,7 +106,7 @@ public class UserPartnerServiceImpl implements UserService {
         if (isPartnerValidated) {
             PartnerDaoImpl userPartnerDao = null;
             userPartnerDao = (PartnerDaoImpl) this.userDao;
-            
+
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPassword = passwordEncoder.encode(partner.getPassword());
             partner.setPassword(hashedPassword);
@@ -141,6 +141,12 @@ public class UserPartnerServiceImpl implements UserService {
         }
 
         return null;
+    }
+
+    @Override
+    public void updateUser(MammbaUser mammbaUser) throws ServiceException {
+        // TODO Auto-generated method stub
+
     }
 
 }

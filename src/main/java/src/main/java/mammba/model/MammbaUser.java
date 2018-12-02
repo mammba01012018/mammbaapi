@@ -13,6 +13,7 @@ package src.main.java.mammba.model;
  */
 public class MammbaUser {
 
+    protected int userId;
     protected String province;
     protected String address1;
     protected String country;
@@ -22,6 +23,13 @@ public class MammbaUser {
 	protected String emailAddress;
 	protected String userType;
 
+
+    public int getUserId() {
+        return this.userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public String getUserType() {
         return this.userType;

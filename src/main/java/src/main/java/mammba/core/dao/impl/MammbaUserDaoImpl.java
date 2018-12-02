@@ -138,10 +138,100 @@ public class MammbaUserDaoImpl implements MammbaUserDao {
             }
         } catch (SQLException | DataAccessException e) {
             LOGGER.error("getUserDetails()-exception");
-            throw new DaoException("MAMMBA[UDI]-01-Database error");
+            throw new DaoException("MAMMBA[GUD]-02-Database error");
 
         }
 
         return null;
     }
+
+    @Override
+    public boolean isUserNameExist(String userName) throws DaoException {
+        try {
+            String sql = this.queryManager.getQuery("IsUserNameExist");
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("username", userName);
+            List<Map<String, Object>> result = this.namedParameterJdbcTemplate.queryForList(sql, params);
+            if (result != null && !result.isEmpty()) {
+                return true;
+            }
+        } catch (SQLException | DataAccessException e) {
+            LOGGER.error("isUserNameExist()-exception");
+            throw new DaoException("MAMMBA[IUNE]-03-Database error");
+
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isEmailExist(String email, int userId) throws DaoException {
+        try {
+            String sql =  "";
+            if (userId  == 0) {
+                sql = this.queryManager.getQuery("IsEmailExist");
+                MapSqlParameterSource params = new MapSqlParameterSource();
+                params.addValue("email", email);
+                List<Map<String, Object>> result = this.namedParameterJdbcTemplate.queryForList(sql, params);
+                if (result != null && !result.isEmpty()) {
+                    return true;
+                }
+            } else {
+                sql = this.queryManager.getQuery("IsEmailExistExceptId");
+                MapSqlParameterSource params = new MapSqlParameterSource();
+                params.addValue("email", email);
+                params.addValue("userId", userId);
+                List<Map<String, Object>> result = this.namedParameterJdbcTemplate.queryForList(sql, params);
+                if (result != null && !result.isEmpty()) {
+                    return true;
+                }
+            }
+
+        } catch (SQLException | DataAccessException e) {
+            LOGGER.error("isEmailExist()-exception");
+            throw new DaoException("MAMMBA[IEE]-04-Database error");
+
+        }
+
+        return false;
+    }
+
+
+    @Override
+    public boolean isMobileNoExist(String mobileNum, int userId) throws DaoException {
+        try {
+            String sql =  "";
+            if (userId  == 0) {
+                sql = this.queryManager.getQuery("IsMobileNoExist");
+                MapSqlParameterSource params = new MapSqlParameterSource();
+                params.addValue("mobilenumber", mobileNum);
+                List<Map<String, Object>> result = this.namedParameterJdbcTemplate.queryForList(sql, params);
+                if (result != null && !result.isEmpty()) {
+                    return true;
+                }
+            } else {
+                sql = this.queryManager.getQuery("IsMobileNoExistExceptId");
+                MapSqlParameterSource params = new MapSqlParameterSource();
+                params.addValue("mobilenumber", mobileNum);
+                params.addValue("userId", userId);
+                List<Map<String, Object>> result = this.namedParameterJdbcTemplate.queryForList(sql, params);
+                if (result != null && !result.isEmpty()) {
+                    return true;
+                }
+            }
+        } catch (SQLException | DataAccessException e) {
+            LOGGER.error("isMobileNoExist()-exception");
+            throw new DaoException("MAMMBA[IMNE]-04-Database error");
+
+        }
+
+        return false;
+    }
+
+    @Override
+    public int update(MammbaUser user) throws DaoException {
+        return 0;
+    }
+
+
 }
