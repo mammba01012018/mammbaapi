@@ -53,6 +53,7 @@ public class MemberDaoImpl extends MammbaUserDaoImpl {
             member.setMiddleInitial(rs.getString("member_middleInitial"));
             member.setProvince(rs.getString("member_province"));
             member.setRate(rs.getString("member_rate"));
+            member.setBirthDate(rs.getDate("member_birthDate"));
 
             return member;
         }
