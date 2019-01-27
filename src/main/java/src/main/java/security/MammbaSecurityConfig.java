@@ -7,7 +7,6 @@ package src.main.java.security;
 
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +45,7 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
     private MammbaAuthenticationLogoutSuccessHandler authLogoutHandler;
 
 
-    private static final Logger LOGGER = Logger.getLogger(MammbaSecurityConfig.class);
+    //private static final Logger LOGGER = Logger.getLogger(MammbaSecurityConfig.class);
 
     /**
      * Configure mammba auth provider.
@@ -63,7 +62,7 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-          .antMatchers("/registerMember", "/registerPartner", "/login", "/logout").permitAll()
+          .antMatchers("/registerMember", "/registerPartner", "/login", "/logout", "/securityQuestions/**").permitAll()
           .antMatchers("/mammba-user/**").hasAnyRole("MEMBER", "PARTNER", "ADMIN")
           .anyRequest().denyAll()
           .and()
@@ -84,7 +83,7 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
           .and()
           .csrf().csrfTokenRepository(
                new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository()))
-              .ignoringAntMatchers("/registerMember", "/registerPartner", "/login", "/logout")
+              .ignoringAntMatchers("/registerMember", "/registerPartner", "/login", "/logout", "/securityQuestions/**")
           .and()
               .cors().configurationSource(this.corsConfigurationSource());
     }

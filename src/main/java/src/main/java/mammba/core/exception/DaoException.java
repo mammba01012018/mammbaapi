@@ -24,4 +24,14 @@ public class DaoException extends Exception {
 		super(errorMessage);
 	}
 
+	/**
+     * This is called for Dao type of exceptions with exception object.
+     *
+     * @param errorMessage                 specific error message.
+     * @param e                            exception ref.
+     */
+    public DaoException(String errorMessage, Exception e) {
+        super(errorMessage, e);
+    }
+
 }

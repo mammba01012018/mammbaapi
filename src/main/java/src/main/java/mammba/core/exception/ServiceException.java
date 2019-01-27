@@ -24,4 +24,14 @@ public class ServiceException extends Exception {
 		super(errorMessage);
 	}
 
+	/**
+     * This is called for Service type of exceptions with exception object.
+     *
+     * @param errorMessage                 specific error message.
+     * @param e                            exception reference.
+     */
+    public ServiceException(String errorMessage, Exception e) {
+        super(errorMessage, e);
+    }
+
 }

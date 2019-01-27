@@ -24,4 +24,13 @@ public class ControllerException extends Exception {
 		super(errorMessage);
 	}
 
+	/**
+     * This is called for Controller type of exceptions having exception ref parameter.
+     *
+     * @param e                 exception ref.
+     */
+    public ControllerException(Exception e) {
+        super(e);
+    }
+
 }
