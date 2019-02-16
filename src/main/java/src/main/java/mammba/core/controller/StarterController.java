@@ -62,7 +62,7 @@ public class StarterController {
         LOGGER.info("register(member)-start");
         try {
             this.userMemberService.register(member);
-            return ResponseEntity.ok().body("Successfully registered member: " + member.getUsername());
+            return ResponseEntity.ok().body(member);
         } catch (ServiceException e) {
             LOGGER.error("Error registering Member.", e);
         }
@@ -82,7 +82,7 @@ public class StarterController {
         LOGGER.info("register(partner)-start");
         try {
             this.userPartnerService.register(partner);
-            return ResponseEntity.ok().body("Successfully registered partner: " + partner.getUsername());
+            return ResponseEntity.ok().body(partner);
         } catch (ServiceException e) {
             LOGGER.error("Error registering Partner.", e);
         }

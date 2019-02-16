@@ -7,7 +7,6 @@ package src.main.java.mammba.core.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +16,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -109,16 +111,21 @@ public class MammbaUserDaoImpl implements MammbaUserDao {
         try {
             java.sql.Date dateTime = new java.sql.Date(new java.util.Date().getTime());
             String sql = this.queryManager.getQuery("addUserAcct");
-            Map<String, Object> paramMap = new HashMap<String, Object>();
-            paramMap.put("username", username);
-            paramMap.put("password", password);
-            paramMap.put("email", email);
-            paramMap.put("creTime", dateTime);
-            paramMap.put("mobileNumber", mobileNumber);
-            paramMap.put("userType", userType);
-            paramMap.put("memberId", memberId);
-            paramMap.put("partnerId", partnerId);
-            return this.namedParameterJdbcTemplate.update(sql, paramMap);
+            KeyHolder holder = new GeneratedKeyHolder();
+
+            SqlParameterSource parameters = new MapSqlParameterSource()
+                    .addValue("username", username)
+                    .addValue("password", password)
+                    .addValue("email", email)
+                    .addValue("creTime", dateTime)
+                    .addValue("mobileNumber", mobileNumber)
+                    .addValue("userType", userType)
+                    .addValue("memberId", memberId)
+                    .addValue("partnerId", partnerId);
+
+            this.namedParameterJdbcTemplate.update(sql, parameters, holder);
+
+            return holder.getKey().intValue();
         } catch (DataAccessException | SQLException e) {
             LOGGER.error("registerMember()-exception", e);
             throw new DaoException("MAMMBA[UDI]-01-Database error");

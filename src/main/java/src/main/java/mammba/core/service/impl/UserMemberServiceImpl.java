@@ -140,8 +140,10 @@ public class UserMemberServiceImpl implements UserService {
             member.setPassword(hashedPassword);
 
             int memberId = userMemberDao.register(member);
-            userMemberDao.addUserAcct(member.getUsername(), member.getPassword(), member.getEmailAddress(),
+            member.setMemberId(memberId);
+            int userId = userMemberDao.addUserAcct(member.getUsername(), member.getPassword(), member.getEmailAddress(),
                     member.getMobileNumber(), "member", memberId, 0);
+            member.setUserId(userId);
 
         } else {
             LOGGER.error(ERR_FOUR);

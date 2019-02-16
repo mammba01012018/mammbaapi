@@ -112,8 +112,10 @@ public class UserPartnerServiceImpl implements UserService {
             partner.setPassword(hashedPassword);
 
             int partnerId = userPartnerDao.register(partner);
-            userPartnerDao.addUserAcct(partner.getUsername(), partner.getPassword(), partner.getEmailAddress(),
-                    partner.getMobileNumber(), "partner", 0, partnerId);
+            partner.setPartnerId(partnerId);
+            int userId = userPartnerDao.addUserAcct(partner.getUsername(), partner.getPassword(),
+                    partner.getEmailAddress(), partner.getMobileNumber(), "partner", 0, partnerId);
+            partner.setUserId(userId);
 
 
         } else {
