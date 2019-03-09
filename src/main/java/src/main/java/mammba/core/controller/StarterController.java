@@ -179,5 +179,22 @@ public class StarterController {
         }
     }
 
+    /**
+     * Get user id for the given user.
+     * @param userName              username/mobile/email.
+     * @return                      user id.
+     * @throws ControllerException  error.
+     */
+    @PostMapping("/securityQuestions/getUserId")
+    public int getUserId(@RequestParam String userName) throws ControllerException {
+        int userId = 0;
+        try {
+            userId = this.securityQuestionService.getUserId(userName);
+        } catch (ServiceException e) {
+            throw new ControllerException(e);
+        }
+
+        return userId;
+    }
 
 }

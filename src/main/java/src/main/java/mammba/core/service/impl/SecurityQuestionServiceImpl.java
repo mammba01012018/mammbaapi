@@ -88,4 +88,18 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
         }
     }
 
+    @Override
+    public int getUserId(String userName) throws ServiceException {
+        if (userName != null && !userName.isEmpty()) {
+            try {
+                int userId = this.securityQuestionDao.getUserId(userName);
+                return userId;
+            } catch (DaoException e) {
+                throw new ServiceException("Unable to get user id for "  + userName, e);
+            }
+        } else {
+            throw new ServiceException("Unable to get user.");
+        }
+    }
+
 }

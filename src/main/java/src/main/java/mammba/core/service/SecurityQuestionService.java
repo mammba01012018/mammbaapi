@@ -54,4 +54,13 @@ public interface SecurityQuestionService {
      */
     void addNewQAUser(int userId, int questionId, String answer) throws ServiceException;
 
+    /**
+     * Get security user id for user.
+     *
+     * @param  userName             user name to get user id.
+     * @return                      user id for user.
+     * @throws ServiceException     logical error.
+     */
+    int getUserId(String userName) throws ServiceException;
+
 }

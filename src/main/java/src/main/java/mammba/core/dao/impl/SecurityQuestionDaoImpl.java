@@ -120,17 +120,34 @@ public class SecurityQuestionDaoImpl implements SecurityQuestionDao {
     public int getQuestionIdForUser(int userId) throws DaoException {
         try {
             String sql = this.queryManager.getQuery("getQuestionForUser");
-            MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("userId", userId);
 
             Integer questionId = this.namedParameterJdbcTemplate.getJdbcOperations()
-                    .queryForList(sql, new Object[] {}, Integer.class).get(0);
+                    .queryForList(sql, new Object[] {userId}, Integer.class).get(0);
             if (questionId != null && questionId > 0) {
                 return questionId;
             }
         } catch (SQLException | DataAccessException e) {
-            LOGGER.error("getQuestionIdForUser()-exception");
+            LOGGER.error("getQuestionIdForUser()-exception", e);
             throw new DaoException("MAMMBA[GQIFU]-05-Database error");
+
+        }
+        return 0;
+    }
+
+    @Override
+    public int getUserId(String userName) throws DaoException {
+        try {
+            String sql = this.queryManager.getQuery("getUserIdFromSecurityQuestion");
+
+
+            Integer userId = this.namedParameterJdbcTemplate.getJdbcOperations()
+                    .queryForList(sql, new Object[] {userName, userName, userName}, Integer.class).get(0);
+            if (userId != null && userId > 0) {
+                return userId;
+            }
+        } catch (SQLException | DataAccessException e) {
+            LOGGER.error("getUserId()-exception", e);
+            throw new DaoException("MAMMBA[GUID]-06-Database error");
 
         }
         return 0;

@@ -63,4 +63,13 @@ public interface SecurityQuestionDao {
      */
     void addNewQAUser(int userId, int questionId, String answer) throws DaoException;
 
+    /**
+     * Get user id of username in the database.
+     *
+     * @param username              username/email/mobile.
+     * @return                      userId.
+     * @throws DaoException         DB error.
+     */
+    int getUserId(String userName) throws DaoException;
+
 }
