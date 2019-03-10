@@ -240,5 +240,4 @@ public class MammbaUserDaoImpl implements MammbaUserDao {
         return 0;
     }
 
-
 }

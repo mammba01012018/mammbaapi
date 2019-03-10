@@ -173,10 +173,11 @@ public class SecurityQuestionDaoImpl implements SecurityQuestionDao {
     }
 
     @Override
-    public void updateUserStatusToTempPwd(int userId) throws DaoException {
+    public void updateUserStatus(int userId, int userStatus) throws DaoException {
         try {
-            String sql = this.queryManager.getQuery("userUpdateToTempPwd");
+            String sql = this.queryManager.getQuery("userUpdateStatus");
             SqlParameterSource parameters = new MapSqlParameterSource()
+                    .addValue("stat", userStatus)
                     .addValue("userId", userId);
 
            this.namedParameterJdbcTemplate.update(sql, parameters);
@@ -205,6 +206,23 @@ public class SecurityQuestionDaoImpl implements SecurityQuestionDao {
         }
 
         return null;
+    }
+
+    @Override
+    public void updateUserPwd(int userId, String hashedPwd) throws DaoException {
+        try {
+            String sql = this.queryManager.getQuery("updateUserPwd");
+            SqlParameterSource parameters = new MapSqlParameterSource()
+                    .addValue("pwd", hashedPwd)
+                    .addValue("userId", userId);
+
+           this.namedParameterJdbcTemplate.update(sql, parameters);
+
+        } catch (DataAccessException | SQLException e) {
+            LOGGER.error("updateUserToTempPwd()-exception", e);
+            throw new DaoException("MAMMBA[UUTT]-10-Database error");
+        }
+
     }
 
 }

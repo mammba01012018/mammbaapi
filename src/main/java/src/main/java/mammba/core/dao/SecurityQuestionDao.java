@@ -72,7 +72,6 @@ public interface SecurityQuestionDao {
      */
     int getUserId(String userName) throws DaoException;
 
-
     /**
      * Get security question for user in the database.
      *
@@ -86,10 +85,10 @@ public interface SecurityQuestionDao {
      * Set user account to temp password status.
      *
      * @param userId                user id to update status.
+     * @param userStatus            usr_stat_id
      * @throws DaoException         DB error.
      */
-    void updateUserStatusToTempPwd(int userId) throws DaoException;
-
+    void updateUserStatus(int userId, int userStatus) throws DaoException;
 
     /**
      * Get Member user's email address.
@@ -99,5 +98,14 @@ public interface SecurityQuestionDao {
      * @throws DaoException         DB error.
      */
     String getUserEmailByUserId(int userId) throws DaoException;
+
+    /**
+     * Update user pwd.
+     *
+     * @param userId                user id of the user.
+     * @param hashedPwd             pwd in hashed format.
+     * @throws DaoException         DB error.
+     */
+    void updateUserPwd(int userId, String hashedPwd) throws DaoException;
 
 }

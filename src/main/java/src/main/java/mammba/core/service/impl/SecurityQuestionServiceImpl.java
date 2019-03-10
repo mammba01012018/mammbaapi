@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +28,8 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
 
     @Autowired
     private EmailUtility emailUtility;
+
+    private static final Logger LOGGER = Logger.getLogger(SecurityQuestionServiceImpl.class);
 
     @Override
     public List<String> getAllSecurityQuestions() throws ServiceException {
@@ -49,12 +55,13 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
     }
 
     @Override
+    @Transactional
     public boolean isSecurityQuestionAnswerValid(int userId, String answer) throws ServiceException {
         if (userId > 0 && answer != null && !answer.isEmpty()) {
             try {
                 boolean isAnswerCorrect = this.securityQuestionDao.isSecurityQuestionAnswerValid(userId, answer);
                 if (isAnswerCorrect) {
-                    this.applyAccountRetrievalProcess(userId);
+                    this.emailUserForTempPwd(userId, this.applyAccountRetrievalProcess(userId));
                 }
 
                 return isAnswerCorrect;
@@ -140,13 +147,37 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
      * Do the account password reset program.
      *
      * @param userId                userId of the user.
+     * @return                      tmpPwd
      * @throws DaoException         DB Error.
      */
-    private void applyAccountRetrievalProcess(int userId) throws DaoException {
-        this.securityQuestionDao.updateUserStatusToTempPwd(userId);
+    private String applyAccountRetrievalProcess(int userId) throws DaoException {
+        this.securityQuestionDao.updateUserStatus(userId, 2);
+        //password generator
+        String tempPwd = RandomStringUtils.randomAlphanumeric(17).toUpperCase();
+        LOGGER.debug("Temp Password is: " + tempPwd);
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(tempPwd);
+        LOGGER.debug("Hashed Password is: " + hashedPassword);
+
+        this.securityQuestionDao.updateUserPwd(userId, hashedPassword);
+
+        return tempPwd;
+
+    }
+
+
+    /**
+     * Email user.
+     *
+     * @param userId                user id to email.
+     * @param tempPwd               tmp password to be sent.
+     * @throws DaoException         DB Error.
+     */
+    private void emailUserForTempPwd(int userId, String tempPwd) throws DaoException {
         String emailAddUser = this.securityQuestionDao.getUserEmailByUserId(userId);
         String body = "Hello Mammba User, \n\nPlease be advised that your account\'s password has been reset.  " +
-                "Please use this tempoary password: " + "\n\nThank you very much.";
+                "Please use this tempoary password: " +tempPwd+ "\n\nThank you very much.";
 
         EmailModel email = new EmailModel();
         email.setToRecipient(emailAddUser);

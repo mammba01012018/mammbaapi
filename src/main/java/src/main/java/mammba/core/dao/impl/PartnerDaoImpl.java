@@ -41,6 +41,15 @@ public class PartnerDaoImpl extends MammbaUserDaoImpl {
             partner.setMobileNumber(rs.getString("user_mobileNumber"));
             partner.setUserType(rs.getString("user_type"));
 
+            if (rs.getInt("user_stat_id") > 0) {
+                switch(rs.getInt("user_stat_id")) {
+                    case 1: partner.setUserStatus(Partner.UserStatus.Active); break;
+                    case 2: partner.setUserStatus(Partner.UserStatus.TempPassword); break;
+                    case 3: partner.setUserStatus(Partner.UserStatus.Locked); break;
+                    case 4: partner.setUserStatus(Partner.UserStatus.Inactive); break;
+                }
+            }
+
             partner.setAddress1(rs.getString("partner_address"));
             partner.setAgencyType(rs.getString("partner_agencyType"));
             partner.setBusinessPermit(rs.getString("partner_businessPermit"));

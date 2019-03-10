@@ -23,6 +23,7 @@ import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.model.MammbaUser;
 import src.main.java.mammba.model.Member;
 
+
 /**
  * Dao class for Member only.
  *
@@ -54,6 +55,15 @@ public class MemberDaoImpl extends MammbaUserDaoImpl {
             member.setProvince(rs.getString("member_province"));
             member.setRate(rs.getString("member_rate"));
             member.setBirthDate(rs.getDate("member_birthDate"));
+
+            if (rs.getInt("user_stat_id") > 0) {
+                switch(rs.getInt("user_stat_id")) {
+                    case 1: member.setUserStatus(Member.UserStatus.Active); break;
+                    case 2: member.setUserStatus(Member.UserStatus.TempPassword); break;
+                    case 3: member.setUserStatus(Member.UserStatus.Locked); break;
+                    case 4: member.setUserStatus(Member.UserStatus.Inactive); break;
+                }
+            }
 
             return member;
         }

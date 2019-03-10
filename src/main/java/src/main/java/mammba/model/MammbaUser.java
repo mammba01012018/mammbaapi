@@ -22,6 +22,14 @@ public class MammbaUser {
 	protected String mobileNumber;
 	protected String emailAddress;
 	protected String userType;
+	protected UserStatus userStatus;
+
+	public static enum UserStatus {
+        Active,
+        TempPassword,
+        Locked,
+        Inactive
+     }
 
 
     public int getUserId() {
@@ -82,4 +90,12 @@ public class MammbaUser {
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
+
+   public UserStatus getUserStatus() {
+        return this.userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
 }

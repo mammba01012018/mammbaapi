@@ -7,9 +7,12 @@ package src.main.java.mammba.core.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import src.main.java.mammba.core.dao.MammbaUserDao;
+import src.main.java.mammba.core.dao.SecurityQuestionDao;
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.MammbaUserService;
@@ -34,6 +37,9 @@ public class MammbaUserServiceImpl implements MammbaUserService {
 
     @Autowired
     private ObjectUtility utility;
+
+    @Autowired
+    private SecurityQuestionDao securityQuestionDao;
 
     /**
      * Checks and validates user credentials.
@@ -63,5 +69,19 @@ public class MammbaUserServiceImpl implements MammbaUserService {
         }
 
         return null;
+    }
+
+    @Override
+    public void updatePassword(int userId, String pwd) throws ServiceException {
+        try {
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(pwd);
+
+            this.securityQuestionDao.updateUserPwd(userId, hashedPassword);
+            this.securityQuestionDao.updateUserStatus(userId, 1);
+        }  catch(DaoException e) {
+            throw new ServiceException("Unable to update User password.", e);
+        }
+
     }
 }

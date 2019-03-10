@@ -34,4 +34,13 @@ public interface MammbaUserService {
       */
      String getUserType(String userName) throws ServiceException;
 
+     /**
+      * Updates user password and set user status to Active.
+      *
+      * @param userId                   user id to update.
+      * @param pwd                      password update.
+      * @throws ServiceException        business error logic.
+      */
+     void updatePassword(int userId, String pwd) throws ServiceException;
+
 }

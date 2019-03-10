@@ -23,6 +23,9 @@ public class Member extends MammbaUser {
 	private String address2;
 	private String rate;
 	private Date birthDate;
+
+
+
 	protected String province;
     protected String country;
 
@@ -99,4 +102,9 @@ public class Member extends MammbaUser {
 				+ ", rate=" + rate + ", memberId=" + memberId + ", address1=" + address1 + ", username=" + username
 				+ ", password=" + password + ", mobileNumber=" + mobileNumber + ", emailAddress=" + emailAddress + "]";
 	}
+
+
+
 }
+
+
