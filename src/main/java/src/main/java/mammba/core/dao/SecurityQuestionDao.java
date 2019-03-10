@@ -72,4 +72,32 @@ public interface SecurityQuestionDao {
      */
     int getUserId(String userName) throws DaoException;
 
+
+    /**
+     * Get security question for user in the database.
+     *
+     * @param userId                user id to get the question.
+     * @return                      question.
+     * @throws DaoException         DB error.
+     */
+    String getQuestionForUserId(int userId) throws DaoException;
+
+    /**
+     * Set user account to temp password status.
+     *
+     * @param userId                user id to update status.
+     * @throws DaoException         DB error.
+     */
+    void updateUserStatusToTempPwd(int userId) throws DaoException;
+
+
+    /**
+     * Get Member user's email address.
+     *
+     * @param userId                user id of the user.
+     * @return                      user email address.
+     * @throws DaoException         DB error.
+     */
+    String getUserEmailByUserId(int userId) throws DaoException;
+
 }

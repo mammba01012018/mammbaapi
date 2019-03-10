@@ -119,7 +119,7 @@ public class SecurityQuestionDaoImpl implements SecurityQuestionDao {
     @Override
     public int getQuestionIdForUser(int userId) throws DaoException {
         try {
-            String sql = this.queryManager.getQuery("getQuestionForUser");
+            String sql = this.queryManager.getQuery("getQuestionIdForUser");
 
             Integer questionId = this.namedParameterJdbcTemplate.getJdbcOperations()
                     .queryForList(sql, new Object[] {userId}, Integer.class).get(0);
@@ -151,6 +151,60 @@ public class SecurityQuestionDaoImpl implements SecurityQuestionDao {
 
         }
         return 0;
+    }
+
+    @Override
+    public String getQuestionForUserId(int userId) throws DaoException {
+        try {
+            String sql = this.queryManager.getQuery("getQuestionForUser");
+
+            String question = this.namedParameterJdbcTemplate.getJdbcOperations()
+                    .queryForList(sql, new Object[] {userId}, String.class).get(0);
+            if (question != null && !question.isEmpty()) {
+                return question;
+            }
+        } catch (SQLException | DataAccessException e) {
+            LOGGER.error("getQuestionIdForUser()-exception", e);
+            throw new DaoException("MAMMBA[GQFUI]-07-Database error");
+
+        }
+
+        return null;
+    }
+
+    @Override
+    public void updateUserStatusToTempPwd(int userId) throws DaoException {
+        try {
+            String sql = this.queryManager.getQuery("userUpdateToTempPwd");
+            SqlParameterSource parameters = new MapSqlParameterSource()
+                    .addValue("userId", userId);
+
+           this.namedParameterJdbcTemplate.update(sql, parameters);
+
+        } catch (DataAccessException | SQLException e) {
+            LOGGER.error("updateUserStatusToTempPwd()-exception", e);
+            throw new DaoException("MAMMBA[UUSTTP]-08-Database error");
+        }
+
+    }
+
+    @Override
+    public String getUserEmailByUserId(int userId) throws DaoException {
+        try {
+            String sql = this.queryManager.getQuery("getUserEmailByUserId");
+
+            String emailAddress = this.namedParameterJdbcTemplate.getJdbcOperations()
+                    .queryForList(sql, new Object[] {userId}, String.class).get(0);
+            if (emailAddress != null && !emailAddress.isEmpty()) {
+                return emailAddress;
+            }
+        } catch (SQLException | DataAccessException e) {
+            LOGGER.error("getUserEmailByUserId()-exception", e);
+            throw new DaoException("MAMMBA[GEBUI]-09-Database error");
+
+        }
+
+        return null;
     }
 
 }

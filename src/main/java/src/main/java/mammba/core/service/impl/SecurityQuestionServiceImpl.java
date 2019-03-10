@@ -1,22 +1,29 @@
 package src.main.java.mammba.core.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import src.main.java.mammba.core.dao.SecurityQuestionDao;
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.SecurityQuestionService;
+import src.main.java.mammba.core.util.EmailUtility;
+import src.main.java.mammba.model.EmailModel;
 
 @Service
 public class SecurityQuestionServiceImpl implements SecurityQuestionService {
 
     @Autowired
     private SecurityQuestionDao securityQuestionDao;
+
+    @Autowired
+    private EmailUtility emailUtility;
 
     @Override
     public List<String> getAllSecurityQuestions() throws ServiceException {
@@ -45,7 +52,12 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
     public boolean isSecurityQuestionAnswerValid(int userId, String answer) throws ServiceException {
         if (userId > 0 && answer != null && !answer.isEmpty()) {
             try {
-                return this.securityQuestionDao.isSecurityQuestionAnswerValid(userId, answer);
+                boolean isAnswerCorrect = this.securityQuestionDao.isSecurityQuestionAnswerValid(userId, answer);
+                if (isAnswerCorrect) {
+                    this.applyAccountRetrievalProcess(userId);
+                }
+
+                return isAnswerCorrect;
             } catch (DaoException e) {
                 throw new ServiceException("Unable to validate answer for user.", e);
             }
@@ -72,7 +84,7 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
     }
 
     @Override
-    public int getQuestionForUser(int userId) throws ServiceException {
+    public int getQuestionForUserId(int userId) throws ServiceException {
         if (userId > 0) {
             try {
                 int questionId = this.securityQuestionDao.getQuestionIdForUser(userId);
@@ -100,6 +112,48 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
         } else {
             throw new ServiceException("Unable to get user.");
         }
+    }
+
+    @Override
+    @Transactional
+    public Map<Integer, String> getQuestionForUserName(String userName) throws ServiceException {
+        if (userName != null && !userName.isEmpty()) {
+            try {
+                Map<Integer, String> userQuestion = new HashMap<>();
+                int userId = this.securityQuestionDao.getUserId(userName);
+                String question = this.securityQuestionDao.getQuestionForUserId(userId);
+                if (question == null) {
+                    throw new ServiceException("Question is none for "  + userName);
+                }
+
+                userQuestion.put(userId, question);
+                return userQuestion;
+            } catch (DaoException e) {
+                throw new ServiceException("Unable to get question for "  + userName, e);
+            }
+        } else {
+            throw new ServiceException("Unable to get user.");
+        }
+    }
+
+    /**
+     * Do the account password reset program.
+     *
+     * @param userId                userId of the user.
+     * @throws DaoException         DB Error.
+     */
+    private void applyAccountRetrievalProcess(int userId) throws DaoException {
+        this.securityQuestionDao.updateUserStatusToTempPwd(userId);
+        String emailAddUser = this.securityQuestionDao.getUserEmailByUserId(userId);
+        String body = "Hello Mammba User, \n\nPlease be advised that your account\'s password has been reset.  " +
+                "Please use this tempoary password: " + "\n\nThank you very much.";
+
+        EmailModel email = new EmailModel();
+        email.setToRecipient(emailAddUser);
+        email.setSubject("Here is your temporary password.");
+        email.setBodyMessage(body);
+
+        this.emailUtility.sendEmail(email);
     }
 
 }

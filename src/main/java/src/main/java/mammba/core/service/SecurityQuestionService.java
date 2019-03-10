@@ -6,6 +6,7 @@
 package src.main.java.mammba.core.service;
 
 import java.util.List;
+import java.util.Map;
 
 import src.main.java.mammba.core.exception.ServiceException;
 
@@ -30,7 +31,7 @@ public interface SecurityQuestionService {
      * @return                      Question id for user.
      * @throws ServiceException     logical error.
      */
-    int getQuestionForUser(int userId) throws ServiceException;
+    int getQuestionForUserId(int userId) throws ServiceException;
 
 
     /**
@@ -62,5 +63,15 @@ public interface SecurityQuestionService {
      * @throws ServiceException     logical error.
      */
     int getUserId(String userName) throws ServiceException;
+
+
+    /**
+     * Get security question id for user.
+     *
+     * @param userName              user name provided.
+     * @return                      Map user id, question
+     * @throws ServiceException     logical error.
+     */
+    Map<Integer, String> getQuestionForUserName(String userName) throws ServiceException;
 
 }
