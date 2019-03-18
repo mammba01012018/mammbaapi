@@ -49,12 +49,20 @@ public interface MammbaUserDao {
 			String userType, int memberId, int partnerId ) throws DaoException;
 
     /**
-     * Get user login details.
+     * Get user login details via user name.
      *
      * @param userName              Login username.
      * @return                      MammbaUser - Partner/Member.
      */
 	MammbaUser getUserDetails(String userName) throws DaoException;
+
+	/**
+     * Get user login details via user id.
+     *
+     * @param userId                user's Id.
+     * @return                      MammbaUser - Partner/Member.
+     */
+    MammbaUser getUserDetails(int userId) throws DaoException;
 
 	/**
      * validates if username exists.

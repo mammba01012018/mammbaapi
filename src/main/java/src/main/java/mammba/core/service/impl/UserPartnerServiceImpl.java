@@ -151,5 +151,11 @@ public class UserPartnerServiceImpl implements UserService {
 
     }
 
+    @Override
+    public MammbaUser getUserDetails(int userId) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
 

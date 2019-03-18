@@ -95,6 +95,4 @@ public class StarterController {
                 (String) userInfo.getAuthentication().getPrincipal());
     }
 
-
-
 }

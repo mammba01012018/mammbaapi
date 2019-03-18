@@ -240,4 +240,24 @@ public class MammbaUserDaoImpl implements MammbaUserDao {
         return 0;
     }
 
+    @Override
+    public MammbaUser getUserDetails(int userId) throws DaoException {
+        try {
+            String sql = this.queryManager.getQuery("getUserDetailByUserId");
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("userId", userId);
+            List<MammbaUser> member = this.namedParameterJdbcTemplate.query(sql,
+                    params, new UserMapper());
+            if (member != null && !member.isEmpty()) {
+                return member.get(0);
+            }
+        } catch (SQLException | DataAccessException e) {
+            LOGGER.error("getUserDetails()-exception");
+            throw new DaoException("MAMMBA[GUD]-02-Database error");
+
+        }
+
+        return null;
+    }
+
 }

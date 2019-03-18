@@ -17,7 +17,9 @@ import src.main.java.mammba.core.dao.impl.MemberDaoImpl;
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.UserService;
+import src.main.java.mammba.core.util.EmailUtility;
 import src.main.java.mammba.core.util.ObjectUtility;
+import src.main.java.mammba.model.EmailModel;
 import src.main.java.mammba.model.MammbaUser;
 import src.main.java.mammba.model.Member;
 
@@ -36,6 +38,9 @@ public class UserMemberServiceImpl implements UserService {
     @Autowired
     @Qualifier("userMemberDao")
     private MammbaUserDao userDao;
+
+    @Autowired
+    private EmailUtility emailUtility;
 
     private static final Logger LOGGER = Logger.getLogger(UserMemberServiceImpl.class);
     private static String ERR_ONE = "No user type exists.";
@@ -144,6 +149,8 @@ public class UserMemberServiceImpl implements UserService {
             int userId = userMemberDao.addUserAcct(member.getUsername(), member.getPassword(), member.getEmailAddress(),
                     member.getMobileNumber(), "member", memberId, 0);
             member.setUserId(userId);
+
+            this.emailWelcomeLetter(member);
 
         } else {
             LOGGER.error(ERR_FOUR);
@@ -288,6 +295,45 @@ public class UserMemberServiceImpl implements UserService {
             throw new ServiceException(ERR_FOUR);
         }
 
+    }
+
+    @Override
+    public MammbaUser getUserDetails(int userId) throws ServiceException {
+        try {
+            MammbaUser user = null;
+            Member memberUser = null;
+            user = this.userDao.getUserDetails(userId);
+            memberUser = user instanceof Member ? (Member) user : null;
+            if (memberUser != null) {
+                return memberUser;
+            }
+        } catch(DaoException e) {
+            throw new ServiceException(ERR_FIVE);
+        }
+        return null;
+    }
+
+
+    /**
+     * Welcome letter.
+     *
+     * @param member                member reference.
+     * @param tempPwd               tmp password to be sent.
+     * @throws DaoException         DB Error.
+     * @throws ServiceException
+     */
+    private void emailWelcomeLetter(MammbaUser user) throws ServiceException {
+        Member member = (Member) user;
+        String body = "Welcome " + member.getFirstName() +
+                ", \n\nThank you for joining Mammba!  Your travel experience starts here!\n" +
+                "Mammba app is absolutely free!  We hope you enjoy using the app!";
+
+        EmailModel email = new EmailModel();
+        email.setToRecipient(member.getEmailAddress());
+        email.setSubject("Welcome " + member.getFirstName() + " " + member.getLastName() + "!");
+        email.setBodyMessage(body);
+
+        this.emailUtility.sendEmail(email);
     }
 
 }

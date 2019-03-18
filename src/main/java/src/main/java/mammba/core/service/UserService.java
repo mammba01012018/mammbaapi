@@ -34,6 +34,15 @@ public interface UserService {
 	MammbaUser getUserDetails(String username) throws ServiceException;
 
 	/**
+     * Get user details via user id.
+     *
+     * @param userId                   user id input.
+     * @return                         MammbaUser reference (Member/Partner).
+     * @throws ServiceException        business error logic.
+     */
+    MammbaUser getUserDetails(int userId) throws ServiceException;
+
+	/**
      * Register a Mammbauser.
      *
      * @param mammbaUser               Could be any mammba user.

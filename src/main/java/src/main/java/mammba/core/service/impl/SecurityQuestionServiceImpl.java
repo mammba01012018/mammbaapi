@@ -29,6 +29,7 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
     @Autowired
     private EmailUtility emailUtility;
 
+
     private static final Logger LOGGER = Logger.getLogger(SecurityQuestionServiceImpl.class);
 
     @Override
@@ -81,6 +82,7 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
                 this.securityQuestionDao.deactivateOldEntry(userId, questionId);
                 //map new q and a then add answer to question
                 this.securityQuestionDao.addNewQAUser(userId, questionId, answer);
+
             } catch (DaoException e) {
                 throw new ServiceException("Unable to insert new question and answer for user: " + userId, e);
             }
@@ -168,7 +170,7 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
 
 
     /**
-     * Email user.
+     * Email user for temporary password.
      *
      * @param userId                user id to email.
      * @param tempPwd               tmp password to be sent.
@@ -186,5 +188,6 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
 
         this.emailUtility.sendEmail(email);
     }
+
 
 }
