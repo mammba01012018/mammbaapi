@@ -18,6 +18,7 @@ import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.UserService;
 import src.main.java.mammba.core.util.EmailUtility;
+import src.main.java.mammba.core.util.ErrorMessage;
 import src.main.java.mammba.core.util.ObjectUtility;
 import src.main.java.mammba.model.EmailModel;
 import src.main.java.mammba.model.MammbaUser;
@@ -43,16 +44,6 @@ public class UserMemberServiceImpl implements UserService {
     private EmailUtility emailUtility;
 
     private static final Logger LOGGER = Logger.getLogger(UserMemberServiceImpl.class);
-    private static String ERR_ONE = "No user type exists.";
-    private static String ERR_TWO = "Member cannot be null";
-    private static String ERR_THREE = "Error register Mammba User";
-    private static String ERR_FOUR = "Member has incomplete details.";
-    private static String ERR_FIVE = "Unable to get Member details.";
-    private static String ERR_SIX = "Username already exist!";
-    private static String ERR_SEVEN = "Error Accessing Data.";
-    private static String ERR_EIGHT = "Email is already registered! Please use a different email.";
-    private static String ERR_NINE = "Mobile number already registered!";
-    private static String ERR_TEN = "Error Updating Member: ";
 
     @Override
     public void register(MammbaUser mammbaUser) throws ServiceException {
@@ -62,17 +53,17 @@ public class UserMemberServiceImpl implements UserService {
                 if (mammbaUser instanceof Member) {
                     this.registerMember((Member) mammbaUser);
                 } else {
-                    LOGGER.error(ERR_ONE);
-                    throw new ServiceException(ERR_ONE);
+                    LOGGER.error(ErrorMessage.PROFILE_ERR_ONE);
+                    throw new ServiceException(ErrorMessage.PROFILE_ERR_ONE);
                 }
 
             } else {
-                LOGGER.error(ERR_TWO);
-                throw new ServiceException(ERR_TWO);
+                LOGGER.error(ErrorMessage.PROFILE_ERR_TWO);
+                throw new ServiceException(ErrorMessage.PROFILE_ERR_TWO);
             }
         } catch (DaoException e) {
-            LOGGER.error(ERR_THREE);
-            throw new ServiceException(ERR_THREE);
+            LOGGER.error(ErrorMessage.PROFILE_ERR_THREE);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_THREE);
         }
     }
 
@@ -84,17 +75,17 @@ public class UserMemberServiceImpl implements UserService {
                 if (mammbaUser instanceof Member) {
                     this.updateMember((Member) mammbaUser);
                 } else {
-                    LOGGER.error(ERR_ONE);
-                    throw new ServiceException(ERR_ONE);
+                    LOGGER.error(ErrorMessage.PROFILE_ERR_ONE);
+                    throw new ServiceException(ErrorMessage.PROFILE_ERR_ONE);
                 }
 
             } else {
-                LOGGER.error(ERR_TWO);
-                throw new ServiceException(ERR_TWO);
+                LOGGER.error(ErrorMessage.PROFILE_ERR_TWO);
+                throw new ServiceException(ErrorMessage.PROFILE_ERR_TWO);
             }
         } catch (DaoException e) {
-            LOGGER.error(ERR_TEN);
-            throw new ServiceException(ERR_TEN + mammbaUser.getUserId());
+            LOGGER.error(ErrorMessage.PROFILE_ERR_TEN);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_TEN + mammbaUser.getUserId());
         }
     }
 
@@ -125,15 +116,15 @@ public class UserMemberServiceImpl implements UserService {
         }
 
         if (isMemberValidated && this.isUserNameExist(member.getUsername())) {
-            throw new ServiceException(ERR_SIX);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_SIX);
         }
 
         if (isMemberValidated && this.isEmailExist(member.getEmailAddress(), 0)) {
-            throw new ServiceException(ERR_EIGHT);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_EIGHT);
         }
 
         if (isMemberValidated && this.isMobileNoExist(member.getMobileNumber(), 0)) {
-            throw new ServiceException(ERR_NINE);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_NINE);
         }
 
         if (isMemberValidated && this.isPasswordCompliant(member.getPassword())) {
@@ -153,8 +144,8 @@ public class UserMemberServiceImpl implements UserService {
             this.emailWelcomeLetter(member);
 
         } else {
-            LOGGER.error(ERR_FOUR);
-            throw new ServiceException(ERR_FOUR);
+            LOGGER.error(ErrorMessage.PROFILE_ERR_FOUR);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_FOUR);
         }
 
     }
@@ -171,7 +162,7 @@ public class UserMemberServiceImpl implements UserService {
         try {
             return this.userDao.isUserNameExist(userName);
         } catch (DaoException e) {
-            throw new ServiceException(ERR_SEVEN);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_SEVEN);
         }
 
     }
@@ -188,7 +179,7 @@ public class UserMemberServiceImpl implements UserService {
         try {
             return this.userDao.isEmailExist(email, userId);
         } catch (DaoException e) {
-            throw new ServiceException(ERR_SEVEN);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_SEVEN);
         }
 
     }
@@ -205,7 +196,7 @@ public class UserMemberServiceImpl implements UserService {
         try {
             return this.userDao.isMobileNoExist(mobileNum, userId);
         } catch (DaoException e) {
-            throw new ServiceException(ERR_SEVEN);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_SEVEN);
         }
 
     }
@@ -245,7 +236,7 @@ public class UserMemberServiceImpl implements UserService {
 
             }
         } catch(DaoException e) {
-            throw new ServiceException(ERR_FIVE);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_FIVE);
         }
         return null;
     }
@@ -273,11 +264,11 @@ public class UserMemberServiceImpl implements UserService {
         }
 
         if (isMemberValidated && this.isEmailExist(member.getEmailAddress(), member.getUserId())) {
-            throw new ServiceException(ERR_EIGHT);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_EIGHT);
         }
 
         if (isMemberValidated && this.isMobileNoExist(member.getMobileNumber(), member.getUserId())) {
-            throw new ServiceException(ERR_NINE);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_NINE);
         }
 
         if (isMemberValidated && this.isPasswordCompliant(member.getPassword())) {
@@ -291,8 +282,8 @@ public class UserMemberServiceImpl implements UserService {
             userMemberDao.update(member);
 
         } else {
-            LOGGER.error(ERR_FOUR);
-            throw new ServiceException(ERR_FOUR);
+            LOGGER.error(ErrorMessage.PROFILE_ERR_FOUR);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_FOUR);
         }
 
     }
@@ -308,7 +299,7 @@ public class UserMemberServiceImpl implements UserService {
                 return memberUser;
             }
         } catch(DaoException e) {
-            throw new ServiceException(ERR_FIVE);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_FIVE);
         }
         return null;
     }

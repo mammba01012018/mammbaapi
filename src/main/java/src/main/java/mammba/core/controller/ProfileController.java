@@ -49,15 +49,18 @@ public class ProfileController {
     @PostMapping("mammba-user/updateMember")
     public ResponseEntity<?> updateMember(@RequestBody Member member) {
         LOGGER.info("updateMember(member)-start");
+        String errorMsg = "";
         try {
             this.userMemberService.updateUser(member);
             return ResponseEntity.ok().body("Successfully updated member: " + member.getUserId());
         } catch (ServiceException e) {
             LOGGER.error("Error updating Member: " + member.getFirstName(), e);
+            errorMsg = e.getMessage();
         }
 
         LOGGER.info("register(member)-end");
-        return ResponseEntity.status(404).body("Unable to update member: " + member.getFirstName());
+        return ResponseEntity.status(404).body("Unable to update member: " + member.getFirstName() + " due to " +
+                errorMsg);
     }
 
     /**
