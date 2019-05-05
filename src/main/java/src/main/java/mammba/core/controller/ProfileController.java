@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import src.main.java.mammba.core.exception.ServiceException;
-import src.main.java.mammba.core.service.MammbaUserService;
+import src.main.java.mammba.core.service.LoginService;
 import src.main.java.mammba.core.service.UserService;
 import src.main.java.mammba.model.Member;
 
@@ -34,7 +34,7 @@ public class ProfileController {
     private UserService userMemberService;
 
     @Autowired
-    private MammbaUserService mammbaUserService;
+    private LoginService mammbaUserService;
 
 
     private static final Logger LOGGER = Logger.getLogger(ProfileController.class);

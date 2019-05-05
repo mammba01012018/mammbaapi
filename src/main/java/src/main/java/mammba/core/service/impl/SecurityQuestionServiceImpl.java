@@ -18,8 +18,15 @@ import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.SecurityQuestionService;
 import src.main.java.mammba.core.util.EmailUtility;
+import src.main.java.mammba.core.util.ErrorMessage;
 import src.main.java.mammba.model.EmailModel;
 
+/**
+ * This service class implements SecurityQuestionService.
+ *
+ * @author Mardolfh Del Rosario
+ *
+ */
 @Service
 public class SecurityQuestionServiceImpl implements SecurityQuestionService {
 
@@ -47,11 +54,11 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
 
                 return listOfQuestions;
             } else {
-                throw new ServiceException("No questions found.");
+                throw new ServiceException(ErrorMessage.SQSTN_NO_QSTN);
             }
 
         } catch (DaoException e) {
-            throw new ServiceException("Unable to load questions.", e);
+            throw new ServiceException(ErrorMessage.SQSTN_ERR_LOAD, e);
         }
     }
 
@@ -67,10 +74,10 @@ public class SecurityQuestionServiceImpl implements SecurityQuestionService {
 
                 return isAnswerCorrect;
             } catch (DaoException e) {
-                throw new ServiceException("Unable to validate answer for user.", e);
+                throw new ServiceException(ErrorMessage.SQSTN_ERR_ANS, e);
             }
         } else {
-            throw new ServiceException("Missing parameters.");
+            throw new ServiceException(ErrorMessage.SQSTN_INC_QA);
         }
     }
 

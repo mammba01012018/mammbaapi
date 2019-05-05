@@ -7,14 +7,27 @@ package src.main.java.mammba.core.util;
  *
  */
 public interface ErrorMessage {
-    String PROFILE_ERR_ONE = "No user type exists.";
-    String PROFILE_ERR_TWO = "Member cannot be null";
-    String PROFILE_ERR_THREE = "Error register Mammba User";
-    String PROFILE_ERR_FOUR = "Member has did not follow password format.";
-    String PROFILE_ERR_FIVE = "Unable to get Member details.";
-    String PROFILE_ERR_SIX = "Username already exist!";
-    String PROFILE_ERR_SEVEN = "Error Accessing Data.";
-    String PROFILE_ERR_EIGHT = "Email is already registered! Please use a different email.";
-    String PROFILE_ERR_NINE = "Mobile number already registered!";
-    String PROFILE_ERR_TEN = "Error Updating Member: ";
+
+    //LoginServiceImpl errors
+    String LOG_ERR_INVLD_LOGIN = "Invalid User login";
+    String LOG_ERR_UPDT_PWD = "Unable to update User password.";
+
+    //
+    String PROFILE_ERR_NO_USR_TYP = "No user type exists.";
+    String PROFILE_ERR_MBR_NULL = "Member cannot be null";
+    String PROFILE_ERR_REG_ERR = "Error register User";
+    String PROFILE_ERR_MBR_PWD = "Member has did not follow password format.";
+    String PROFILE_ERR_MBR_DTL_LOAD = "Unable to get Member details.";
+    String PROFILE_ERR_PRTNR_DTL_LOAD = "Unable to get Partner details.";
+    String PROFILE_ERR_USR_EXST = "Username already exist!";
+    String PROFILE_ERR_ACS_DTA = "Error Accessing Data.";
+    String PROFILE_ERR_EML_EXST = "Email is already registered! Please use a different email.";
+    String PROFILE_ERR_MBL_REG = "Mobile number already registered!";
+    String PROFILE_ERR_UPDT_MEM = "Error Updating Member: ";
+
+    //SecurityQuestionServiceImpl errors
+    String SQSTN_NO_QSTN = "No questions found.";
+    String SQSTN_ERR_LOAD = "Unable to load questions.";
+    String SQSTN_ERR_ANS = "Unable to validate answer for user.";
+    String SQSTN_INC_QA = "Incomplete Security Question Parameters.";
 }

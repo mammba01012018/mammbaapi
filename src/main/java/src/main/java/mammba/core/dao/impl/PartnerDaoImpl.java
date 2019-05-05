@@ -35,6 +35,7 @@ public class PartnerDaoImpl extends MammbaUserDaoImpl {
         @Override
         public Partner mapRow(ResultSet rs, int rowNum) throws SQLException {
             Partner partner = new Partner();
+            partner.setUserId(rs.getInt("user_id"));
             partner.setUsername(rs.getString("user_userName"));
             partner.setPassword(rs.getString("user_password"));
             partner.setEmailAddress(rs.getString("user_email"));

@@ -53,17 +53,17 @@ public class UserMemberServiceImpl implements UserService {
                 if (mammbaUser instanceof Member) {
                     this.registerMember((Member) mammbaUser);
                 } else {
-                    LOGGER.error(ErrorMessage.PROFILE_ERR_ONE);
-                    throw new ServiceException(ErrorMessage.PROFILE_ERR_ONE);
+                    LOGGER.error(ErrorMessage.PROFILE_ERR_NO_USR_TYP);
+                    throw new ServiceException(ErrorMessage.PROFILE_ERR_NO_USR_TYP);
                 }
 
             } else {
-                LOGGER.error(ErrorMessage.PROFILE_ERR_TWO);
-                throw new ServiceException(ErrorMessage.PROFILE_ERR_TWO);
+                LOGGER.error(ErrorMessage.PROFILE_ERR_MBR_NULL);
+                throw new ServiceException(ErrorMessage.PROFILE_ERR_MBR_NULL);
             }
         } catch (DaoException e) {
-            LOGGER.error(ErrorMessage.PROFILE_ERR_THREE);
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_THREE);
+            LOGGER.error(ErrorMessage.PROFILE_ERR_REG_ERR);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_REG_ERR);
         }
     }
 
@@ -75,17 +75,17 @@ public class UserMemberServiceImpl implements UserService {
                 if (mammbaUser instanceof Member) {
                     this.updateMember((Member) mammbaUser);
                 } else {
-                    LOGGER.error(ErrorMessage.PROFILE_ERR_ONE);
-                    throw new ServiceException(ErrorMessage.PROFILE_ERR_ONE);
+                    LOGGER.error(ErrorMessage.PROFILE_ERR_NO_USR_TYP);
+                    throw new ServiceException(ErrorMessage.PROFILE_ERR_NO_USR_TYP);
                 }
 
             } else {
-                LOGGER.error(ErrorMessage.PROFILE_ERR_TWO);
-                throw new ServiceException(ErrorMessage.PROFILE_ERR_TWO);
+                LOGGER.error(ErrorMessage.PROFILE_ERR_MBR_NULL);
+                throw new ServiceException(ErrorMessage.PROFILE_ERR_MBR_NULL);
             }
         } catch (DaoException e) {
-            LOGGER.error(ErrorMessage.PROFILE_ERR_TEN);
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_TEN + mammbaUser.getUserId());
+            LOGGER.error(ErrorMessage.PROFILE_ERR_UPDT_MEM);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_UPDT_MEM + mammbaUser.getUserId());
         }
     }
 
@@ -116,15 +116,15 @@ public class UserMemberServiceImpl implements UserService {
         }
 
         if (isMemberValidated && this.isUserNameExist(member.getUsername())) {
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_SIX);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_USR_EXST);
         }
 
         if (isMemberValidated && this.isEmailExist(member.getEmailAddress(), 0)) {
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_EIGHT);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_EML_EXST);
         }
 
         if (isMemberValidated && this.isMobileNoExist(member.getMobileNumber(), 0)) {
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_NINE);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_MBL_REG);
         }
 
         if (isMemberValidated && this.isPasswordCompliant(member.getPassword())) {
@@ -144,8 +144,8 @@ public class UserMemberServiceImpl implements UserService {
             this.emailWelcomeLetter(member);
 
         } else {
-            LOGGER.error(ErrorMessage.PROFILE_ERR_FOUR);
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_FOUR);
+            LOGGER.error(ErrorMessage.PROFILE_ERR_MBR_PWD);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_MBR_PWD);
         }
 
     }
@@ -162,7 +162,7 @@ public class UserMemberServiceImpl implements UserService {
         try {
             return this.userDao.isUserNameExist(userName);
         } catch (DaoException e) {
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_SEVEN);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_ACS_DTA);
         }
 
     }
@@ -179,7 +179,7 @@ public class UserMemberServiceImpl implements UserService {
         try {
             return this.userDao.isEmailExist(email, userId);
         } catch (DaoException e) {
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_SEVEN);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_ACS_DTA);
         }
 
     }
@@ -196,7 +196,7 @@ public class UserMemberServiceImpl implements UserService {
         try {
             return this.userDao.isMobileNoExist(mobileNum, userId);
         } catch (DaoException e) {
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_SEVEN);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_ACS_DTA);
         }
 
     }
@@ -236,7 +236,7 @@ public class UserMemberServiceImpl implements UserService {
 
             }
         } catch(DaoException e) {
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_FIVE);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_MBR_DTL_LOAD);
         }
         return null;
     }
@@ -264,11 +264,11 @@ public class UserMemberServiceImpl implements UserService {
         }
 
         if (isMemberValidated && this.isEmailExist(member.getEmailAddress(), member.getUserId())) {
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_EIGHT);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_EML_EXST);
         }
 
         if (isMemberValidated && this.isMobileNoExist(member.getMobileNumber(), member.getUserId())) {
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_NINE);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_MBL_REG);
         }
 
         if (isMemberValidated && this.isPasswordCompliant(member.getPassword())) {
@@ -282,8 +282,8 @@ public class UserMemberServiceImpl implements UserService {
             userMemberDao.update(member);
 
         } else {
-            LOGGER.error(ErrorMessage.PROFILE_ERR_FOUR);
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_FOUR);
+            LOGGER.error(ErrorMessage.PROFILE_ERR_MBR_PWD);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_MBR_PWD);
         }
 
     }
@@ -299,7 +299,7 @@ public class UserMemberServiceImpl implements UserService {
                 return memberUser;
             }
         } catch(DaoException e) {
-            throw new ServiceException(ErrorMessage.PROFILE_ERR_FIVE);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_MBR_DTL_LOAD);
         }
         return null;
     }

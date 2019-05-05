@@ -1,5 +1,5 @@
 /**
- * MammbaUserServiceImpl.java - MAMMBA Application
+ * LoginServiceImpl.java - MAMMBA Application
  * 2018 All rights reserved.
  *
  */
@@ -15,21 +15,21 @@ import src.main.java.mammba.core.dao.MammbaUserDao;
 import src.main.java.mammba.core.dao.SecurityQuestionDao;
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
-import src.main.java.mammba.core.service.MammbaUserService;
+import src.main.java.mammba.core.service.LoginService;
+import src.main.java.mammba.core.util.ErrorMessage;
 import src.main.java.mammba.core.util.ObjectUtility;
 import src.main.java.mammba.model.LoginModel;
 import src.main.java.mammba.model.MammbaUser;
 
 /**
- * Implements the MammbaUserService interface.
+ * Implements the LoginService interface.
  *
  * @author Mardolfh Del Rosario
  *
  */
 @Service
-public class MammbaUserServiceImpl implements MammbaUserService {
+public class LoginServiceImpl implements LoginService {
 
-    private static String ERR_ONE = "Invalid Mammba login";
 
     @Autowired
     @Qualifier("userDao")
@@ -53,7 +53,7 @@ public class MammbaUserServiceImpl implements MammbaUserService {
         try {
             return this.userDao.isLoginValid(loginModel);
         } catch(DaoException e) {
-            throw new ServiceException(ERR_ONE);
+            throw new ServiceException(ErrorMessage.LOG_ERR_INVLD_LOGIN, e);
         }
     }
 
@@ -65,7 +65,7 @@ public class MammbaUserServiceImpl implements MammbaUserService {
                 return user.getUserType();
             }
         } catch(DaoException e) {
-            throw new ServiceException("Unable to acquire mammba user.");
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_ACS_DTA, e);
         }
 
         return null;
@@ -80,7 +80,7 @@ public class MammbaUserServiceImpl implements MammbaUserService {
             this.securityQuestionDao.updateUserPwd(userId, hashedPassword);
             this.securityQuestionDao.updateUserStatus(userId, 1);
         }  catch(DaoException e) {
-            throw new ServiceException("Unable to update User password.", e);
+            throw new ServiceException(ErrorMessage.LOG_ERR_UPDT_PWD, e);
         }
 
     }

@@ -17,6 +17,7 @@ import src.main.java.mammba.core.dao.impl.PartnerDaoImpl;
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.UserService;
+import src.main.java.mammba.core.util.ErrorMessage;
 import src.main.java.mammba.core.util.ObjectUtility;
 import src.main.java.mammba.model.MammbaUser;
 import src.main.java.mammba.model.Partner;
@@ -39,12 +40,6 @@ public class UserPartnerServiceImpl implements UserService {
 
 
     private static final Logger LOGGER = Logger.getLogger(UserPartnerServiceImpl.class);
-    private static String ERR_ONE = "No user type exists.";
-    private static String ERR_TWO = "Member cannot be null";
-    private static String ERR_THREE = "Error register Mammba User";
-    private static String ERR_FOUR = "Partner has incomplete details.";
-    private static String ERR_FIVE = "Unable to get Partner details.";
-
 
     @Override
     public void register(MammbaUser mammbaUser) throws ServiceException {
@@ -54,17 +49,17 @@ public class UserPartnerServiceImpl implements UserService {
                 if (mammbaUser instanceof Partner) {
                     this.registerPartner((Partner) mammbaUser);
                 } else {
-                    LOGGER.error(ERR_ONE);
-                    throw new ServiceException(ERR_ONE);
+                    LOGGER.error(ErrorMessage.PROFILE_ERR_NO_USR_TYP);
+                    throw new ServiceException(ErrorMessage.PROFILE_ERR_NO_USR_TYP);
                 }
 
             } else {
-                LOGGER.error(ERR_TWO);
-                throw new ServiceException(ERR_TWO);
+                LOGGER.error(ErrorMessage.PROFILE_ERR_MBR_NULL);
+                throw new ServiceException(ErrorMessage.PROFILE_ERR_MBR_NULL);
             }
         } catch (DaoException e) {
-            LOGGER.error(ERR_THREE);
-            throw new ServiceException(ERR_THREE);
+            LOGGER.error(ErrorMessage.PROFILE_ERR_REG_ERR);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_REG_ERR);
         }
     }
 
@@ -119,8 +114,8 @@ public class UserPartnerServiceImpl implements UserService {
 
 
         } else {
-            LOGGER.error(ERR_FOUR);
-            throw new ServiceException(ERR_FOUR);
+            LOGGER.error(ErrorMessage.PROFILE_ERR_REG_ERR);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_REG_ERR);
         }
 
     }
@@ -139,7 +134,7 @@ public class UserPartnerServiceImpl implements UserService {
 
             }
         } catch(DaoException e) {
-            throw new ServiceException(ERR_FIVE);
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_PRTNR_DTL_LOAD);
         }
 
         return null;

@@ -1,5 +1,5 @@
 /**
- * MammbaUserService.java - MAMMBA Application
+ * LoginService.java - MAMMBA Application
  * 2018 All rights reserved.
  *
  */
@@ -14,7 +14,7 @@ import src.main.java.mammba.model.LoginModel;
  * @author Mardolfh Del Rosario
  *
  */
-public interface MammbaUserService {
+public interface LoginService {
 
     /**
      * Checks and validates user credentials.
