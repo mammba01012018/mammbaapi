@@ -175,23 +175,25 @@ public class MammbaUserDaoImpl implements MammbaUserDao {
     public boolean isEmailExist(String email, int userId) throws DaoException {
         try {
             String sql =  "";
+            MapSqlParameterSource params = null;
+            List<Map<String, Object>> result = null;
             if (userId  == 0) {
                 sql = this.queryManager.getQuery("IsEmailExist");
-                MapSqlParameterSource params = new MapSqlParameterSource();
+                params = new MapSqlParameterSource();
                 params.addValue("email", email);
-                List<Map<String, Object>> result = this.namedParameterJdbcTemplate.queryForList(sql, params);
-                if (result != null && !result.isEmpty()) {
-                    return true;
-                }
+
             } else {
                 sql = this.queryManager.getQuery("IsEmailExistExceptId");
-                MapSqlParameterSource params = new MapSqlParameterSource();
+                params = new MapSqlParameterSource();
                 params.addValue("email", email);
                 params.addValue("userId", userId);
-                List<Map<String, Object>> result = this.namedParameterJdbcTemplate.queryForList(sql, params);
-                if (result != null && !result.isEmpty()) {
-                    return true;
-                }
+
+            }
+
+            result = this.namedParameterJdbcTemplate.queryForList(sql, params);
+
+            if (result != null && !result.isEmpty()) {
+                return true;
             }
 
         } catch (SQLException | DataAccessException e) {

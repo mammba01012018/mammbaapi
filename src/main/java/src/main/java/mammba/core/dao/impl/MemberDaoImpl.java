@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import src.main.java.mammba.core.exception.DaoException;
+import src.main.java.mammba.core.util.ObjectUtility;
 import src.main.java.mammba.model.MammbaUser;
 import src.main.java.mammba.model.Member;
 
@@ -32,6 +34,9 @@ import src.main.java.mammba.model.Member;
  */
 @Repository("userMemberDao")
 public class MemberDaoImpl extends MammbaUserDaoImpl {
+
+    @Autowired
+    private ObjectUtility objectUtility;
 
     private static final Logger LOGGER = Logger.getLogger(MemberDaoImpl.class);
     private static class MemberMapper implements RowMapper<Member> {
@@ -123,12 +128,24 @@ public class MemberDaoImpl extends MammbaUserDaoImpl {
     public int update(MammbaUser user) throws DaoException {
         try {
             Member member = (Member) user;
-            String sql0 = this.queryManager.getQuery("updateUser");
-            SqlParameterSource parameters = new MapSqlParameterSource()
-                    .addValue("emailAddress", member.getEmailAddress())
-                    .addValue("mobileNumber", member.getMobileNumber())
-                    .addValue("password", member.getPassword())
-                    .addValue("memberId", member.getMemberId());
+            String sql0 = "";
+            SqlParameterSource parameters = null;
+            LOGGER.info("password=" + member.getPassword());
+            if (!this.objectUtility.isNullOrEmpty(member.getPassword())) {
+                sql0 = this.queryManager.getQuery("updateUser");
+                parameters = new MapSqlParameterSource()
+                        .addValue("emailAddress", member.getEmailAddress())
+                        .addValue("mobileNumber", member.getMobileNumber())
+                        .addValue("password", member.getPassword())
+                        .addValue("userId", member.getUserId());
+
+            } else {
+                sql0 = this.queryManager.getQuery("updateUserNoPwd");
+                parameters = new MapSqlParameterSource()
+                        .addValue("emailAddress", member.getEmailAddress())
+                        .addValue("mobileNumber", member.getMobileNumber())
+                        .addValue("userId", member.getUserId());
+            }
 
             //Updates USER table
             int result = this.namedParameterJdbcTemplate.update(sql0, parameters);

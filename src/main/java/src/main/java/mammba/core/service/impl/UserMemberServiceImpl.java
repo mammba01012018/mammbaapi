@@ -252,8 +252,7 @@ public class UserMemberServiceImpl implements UserService {
         boolean isMemberValidated = false;
         LOGGER.info(member);
         //check required fields
-        if (!this.objectUtility.isNullOrEmpty(member.getPassword()) &&
-            !this.objectUtility.isNullOrEmpty(member.getMobileNumber()) &&
+        if (!this.objectUtility.isNullOrEmpty(member.getMobileNumber()) &&
             !this.objectUtility.isNullOrEmpty(member.getEmailAddress()) &&
             !this.objectUtility.isNullOrEmpty(member.getFirstName()) &&
             !this.objectUtility.isNullOrEmpty(member.getLastName()) &&
@@ -271,9 +270,11 @@ public class UserMemberServiceImpl implements UserService {
             throw new ServiceException(ErrorMessage.PROFILE_ERR_MBL_REG);
         }
 
-        if (isMemberValidated && this.isPasswordCompliant(member.getPassword())) {
-            MemberDaoImpl userMemberDao = null;
-            userMemberDao = (MemberDaoImpl) this.userDao;
+        MemberDaoImpl userMemberDao = null;
+        userMemberDao = (MemberDaoImpl) this.userDao;
+
+        if (!this.objectUtility.isNullOrEmpty(member.getPassword()) && !"null".equalsIgnoreCase(member.getPassword()) &&
+           isMemberValidated && this.isPasswordCompliant(member.getPassword())) {
 
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPassword = passwordEncoder.encode(member.getPassword());
@@ -281,10 +282,14 @@ public class UserMemberServiceImpl implements UserService {
 
             userMemberDao.update(member);
 
-        } else {
+        } else if (isMemberValidated) {
+            userMemberDao.update(member);
+        }  else {
             LOGGER.error(ErrorMessage.PROFILE_ERR_MBR_PWD);
             throw new ServiceException(ErrorMessage.PROFILE_ERR_MBR_PWD);
         }
+
+
 
     }
 
