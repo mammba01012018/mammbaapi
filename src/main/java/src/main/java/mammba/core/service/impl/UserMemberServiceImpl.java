@@ -257,7 +257,8 @@ public class UserMemberServiceImpl implements UserService {
             !this.objectUtility.isNullOrEmpty(member.getFirstName()) &&
             !this.objectUtility.isNullOrEmpty(member.getLastName()) &&
             !this.objectUtility.isNullOrEmpty(member.getAddress1()) &&
-            !this.objectUtility.isNullOrEmpty(member.getUserId())) {
+            !this.objectUtility.isNullOrEmpty(member.getUserId()) &&
+            !this.objectUtility.isNullOrEmpty(member.getMemberId())) {
 
             isMemberValidated = true;
         }
@@ -273,7 +274,7 @@ public class UserMemberServiceImpl implements UserService {
         MemberDaoImpl userMemberDao = null;
         userMemberDao = (MemberDaoImpl) this.userDao;
 
-        if (!this.objectUtility.isNullOrEmpty(member.getPassword()) && !"null".equalsIgnoreCase(member.getPassword()) &&
+        if (!this.objectUtility.isNullOrEmpty(member.getPassword()) &&
            isMemberValidated && this.isPasswordCompliant(member.getPassword())) {
 
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

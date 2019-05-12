@@ -7,8 +7,10 @@
 package src.main.java.mammba.core.controller;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,7 +54,10 @@ public class ProfileController {
         String errorMsg = "";
         try {
             this.userMemberService.updateUser(member);
-            return ResponseEntity.ok().body("Successfully updated member: " + member.getUserId());
+            Member updatedMember = (Member)this.userMemberService.getUserDetails(member.getEmailAddress());
+            JSONObject obj = new JSONObject(updatedMember);
+
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(obj.toString());
         } catch (ServiceException e) {
             LOGGER.error("Error updating Member: " + member.getFirstName(), e);
             errorMsg = e.getMessage();
