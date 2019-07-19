@@ -113,6 +113,7 @@ public class UserMemberServiceImpl implements UserService {
             !this.objectUtility.isNullOrEmpty(member.getBirthDate())) {
 
             isMemberValidated = true;
+            LOGGER.info("all fields are complete.");
         }
 
         if (isMemberValidated && this.isUserNameExist(member.getUsername())) {
@@ -160,6 +161,7 @@ public class UserMemberServiceImpl implements UserService {
      */
     private boolean isUserNameExist(String userName) throws ServiceException {
         try {
+            LOGGER.info("Checking username: " + userName);
             return this.userDao.isUserNameExist(userName);
         } catch (DaoException e) {
             throw new ServiceException(ErrorMessage.PROFILE_ERR_ACS_DTA);
