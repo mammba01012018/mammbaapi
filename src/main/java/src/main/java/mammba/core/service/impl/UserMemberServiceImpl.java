@@ -22,6 +22,7 @@ import src.main.java.mammba.core.util.ErrorMessage;
 import src.main.java.mammba.core.util.ObjectUtility;
 import src.main.java.mammba.model.EmailModel;
 import src.main.java.mammba.model.MammbaUser;
+import src.main.java.mammba.model.MammbaUser.UserStatus;
 import src.main.java.mammba.model.Member;
 
 /**
@@ -141,6 +142,8 @@ public class UserMemberServiceImpl implements UserService {
             int userId = userMemberDao.addUserAcct(member.getUsername(), member.getPassword(), member.getEmailAddress(),
                     member.getMobileNumber(), "member", memberId, 0);
             member.setUserId(userId);
+            member.setUserType("member");
+            member.setUserStatus(UserStatus.Active);
 
             this.emailWelcomeLetter(member);
 
