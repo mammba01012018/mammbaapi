@@ -218,10 +218,26 @@ public class UserMemberServiceImpl implements UserService {
 
         if (password != null && !password.isEmpty() && password.length() < 8) {
             isValid = false;
-        } else if (password.matches("^[ A-Za-z0-9_@./#&+-]+$")) {
-            isValid = true;
         } else {
+            char pwd[] = password.toCharArray();
+            int alpha = 0;
+            int num = 0;
+            int spec = 0;
             isValid = false;
+            for (char index : pwd) {
+                String character = String.valueOf(index);
+
+                if (character.matches("[A-Za-z]+")) {
+                    alpha++;
+                } else if (character.matches("[0-9]+")) {
+                    num++;
+                } else if (character.matches("[_@./#$-]")) {
+                    spec++;
+                }
+            }
+            if (alpha > 0 && num > 0 && spec > 0) {
+                isValid = true;
+            }
         }
 
         return isValid;
