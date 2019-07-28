@@ -51,15 +51,17 @@ public class StarterController {
     @PostMapping("registerMember")
     public ResponseEntity<?> register(@RequestBody Member member) {
         LOGGER.info("register(member)-start");
+        String errMsg = "";
         try {
             this.userMemberService.register(member);
             return ResponseEntity.ok().body(member);
         } catch (ServiceException e) {
             LOGGER.error("Error registering Member.", e);
+            errMsg = e.getMessage();
         }
 
         LOGGER.info("register(member)-end");
-        return ResponseEntity.status(404).body("Unable to register member.");
+        return ResponseEntity.status(404).body(errMsg);
     }
 
     /**
@@ -71,15 +73,17 @@ public class StarterController {
     @PostMapping("registerPartner")
     public ResponseEntity<?> register(@RequestBody Partner partner) {
         LOGGER.info("register(partner)-start");
+        String errMsg = "";
         try {
             this.userPartnerService.register(partner);
             return ResponseEntity.ok().body(partner);
         } catch (ServiceException e) {
             LOGGER.error("Error registering Partner.", e);
+            errMsg = e.getMessage();
         }
 
         LOGGER.info("register(partner)-end");
-        return ResponseEntity.status(404).body("Unable to register partner.");
+        return ResponseEntity.status(404).body(errMsg);
     }
 
     /**

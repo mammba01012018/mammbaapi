@@ -16,7 +16,7 @@ public interface ErrorMessage {
     String PROFILE_ERR_NO_USR_TYP = "No user type exists.";
     String PROFILE_ERR_MBR_NULL = "Member cannot be null";
     String PROFILE_ERR_REG_ERR = "Error register User";
-    String PROFILE_ERR_MBR_PWD = "Member has did not follow password format.";
+    String PROFILE_ERR_MBR_PWD = "Member did not follow password format.";
     String PROFILE_ERR_MBR_DTL_LOAD = "Unable to get Member details.";
     String PROFILE_ERR_PRTNR_DTL_LOAD = "Unable to get Partner details.";
     String PROFILE_ERR_USR_EXST = "Username already exist!";
