@@ -48,7 +48,9 @@ dependencies {
 		      'commons-validator:commons-validator:1.4.0',
 		      'org.json:json:20180813',
 		      'org.springframework.boot:spring-boot-starter-mail',
-		      'org.apache.commons:commons-lang3:3.0'
+		      'org.apache.commons:commons-lang3:3.0',
+		      'com.zaxxer:HikariCP',
+		      'org.springframework:spring-tx'
 		)
 		
 		

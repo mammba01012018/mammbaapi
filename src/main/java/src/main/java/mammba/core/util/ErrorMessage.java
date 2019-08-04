@@ -24,10 +24,13 @@ public interface ErrorMessage {
     String PROFILE_ERR_EML_EXST = "Email is already registered! Please use a different email.";
     String PROFILE_ERR_MBL_REG = "Mobile number already registered!";
     String PROFILE_ERR_UPDT_MEM = "Error Updating Member: ";
+    String PROFILE_ERR_EMAIL_SEND = "Email does not exists.";
+    String PROFILE_ERR_EMAIL_FAIL = "There is something wrong in the email.";
 
     //SecurityQuestionServiceImpl errors
     String SQSTN_NO_QSTN = "No questions found.";
     String SQSTN_ERR_LOAD = "Unable to load questions.";
     String SQSTN_ERR_ANS = "Unable to validate answer for user.";
     String SQSTN_INC_QA = "Incomplete Security Question Parameters.";
+
 }
