@@ -157,8 +157,13 @@ public class MemberDaoImpl extends MammbaUserDaoImpl {
                     .addValue("lastName", member.getLastName())
                     .addValue("middleInitial", member.getMiddleInitial())
                     .addValue("address1", member.getAddress1())
+                    .addValue("address2", member.getAddress2())
                     .addValue("emailAddress", member.getEmailAddress())
                     .addValue("mobileNumber", member.getMobileNumber())
+                    .addValue("gender", member.getGender())
+                    .addValue("birthDate", member.getBirthDate())
+                    .addValue("province", member.getProvince())
+                    .addValue("country", member.getCountry())
                     .addValue("memberId", member.getMemberId());
 
            //Updates MEMBER table

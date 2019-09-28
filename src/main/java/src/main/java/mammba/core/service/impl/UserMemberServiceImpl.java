@@ -99,6 +99,7 @@ public class UserMemberServiceImpl implements UserService {
      * @throws DaoException                Database error.
      * @throws ServiceException            Business logic error.
      */
+    @Transactional
     private void registerMember(Member member) throws DaoException, ServiceException {
         boolean isMemberValidated = false;
 
@@ -117,6 +118,9 @@ public class UserMemberServiceImpl implements UserService {
 
             isMemberValidated = true;
             LOGGER.info("all fields are complete.");
+        } else {
+            LOGGER.error(ErrorMessage.PROFILE_ERR_UPDT_MEM + ", null values detected.");
+            throw new ServiceException(ErrorMessage.PROFILE_ERR_UPDT_MEM + ", incomplete data param");
         }
 
         if (isMemberValidated && this.isUserNameExist(member.getUsername())) {
@@ -280,6 +284,11 @@ public class UserMemberServiceImpl implements UserService {
             !this.objectUtility.isNullOrEmpty(member.getFirstName()) &&
             !this.objectUtility.isNullOrEmpty(member.getLastName()) &&
             !this.objectUtility.isNullOrEmpty(member.getAddress1()) &&
+            !this.objectUtility.isNullOrEmpty(member.getAddress2()) &&
+            !this.objectUtility.isNullOrEmpty(member.getGender()) &&
+            !this.objectUtility.isNullOrEmpty(member.getProvince()) &&
+            !this.objectUtility.isNullOrEmpty(member.getCountry()) &&
+            !this.objectUtility.isNullOrEmpty(member.getBirthDate()) &&
             !this.objectUtility.isNullOrEmpty(member.getUserId()) &&
             !this.objectUtility.isNullOrEmpty(member.getMemberId())) {
 

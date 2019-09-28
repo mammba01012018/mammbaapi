@@ -63,7 +63,7 @@ public class ProfileController {
             errorMsg = e.getMessage();
         }
 
-        LOGGER.info("register(member)-end");
+        LOGGER.info("updateMember(member)-end");
         return ResponseEntity.status(404).body("Unable to update member: " + member.getFirstName() + " due to " +
                 errorMsg);
     }
