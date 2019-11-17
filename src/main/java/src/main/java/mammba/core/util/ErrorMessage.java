@@ -32,5 +32,7 @@ public interface ErrorMessage {
     String SQSTN_ERR_LOAD = "Unable to load questions.";
     String SQSTN_ERR_ANS = "Unable to validate answer for user.";
     String SQSTN_INC_QA = "Incomplete Security Question Parameters.";
+    
+    String TOUR_ERR_ADD_ERR = "Error adding Tour";
 
 }
