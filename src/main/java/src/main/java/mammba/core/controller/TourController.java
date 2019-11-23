@@ -70,7 +70,7 @@ public class TourController {
 	
 	@GetMapping("tour/get-all-tours")
 	public ResponseEntity<?> getAllTours() {
-		LOGGER.info("Get Tour -start");
+		LOGGER.info("Get All Tours -start");
 		String errorMsg = "";
 
 		try {
@@ -84,7 +84,7 @@ public class TourController {
 			errorMsg = e.getMessage();
 		}
 
-		LOGGER.info("Get Tour -end");
+		LOGGER.info("Get All Tours -end");
 		return ResponseEntity.status(404).body("Unable to get  All Tours" + "due to " + errorMsg);
 
 	}
