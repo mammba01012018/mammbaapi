@@ -64,7 +64,7 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
           .antMatchers("/registerMember", "/registerPartner", "/login", "/logout", "/securityQuestions/**").permitAll()
           .antMatchers("/mammba-user/**").hasAnyRole("MEMBER", "PARTNER", "ADMIN")
-          .antMatchers("/tour/**").hasAnyRole("PARTNER")
+          .antMatchers("/tour/**").hasAnyRole("MEMBER", "PARTNER")
           .anyRequest().denyAll()
           .and()
           .exceptionHandling()
