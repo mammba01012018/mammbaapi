@@ -88,5 +88,26 @@ public class TourController {
 		return ResponseEntity.status(404).body("Unable to get  All Tours" + "due to " + errorMsg);
 
 	}
+	
+	@PostMapping("tour/searchTours")
+	public ResponseEntity<?> searchTours(@RequestBody Tour tour) {
+		LOGGER.info("Search Tours -start");
+		String errorMsg = "";
+
+		try {
+			List<Tour> tourList = this.tourService.searchTour(tour);
+
+			JSONArray obj = new JSONArray(tourList);
+
+			return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(obj.toString());
+		} catch (ServiceException e) {
+			LOGGER.error("Error Searching Tours : ", e);
+			errorMsg = e.getMessage();
+		}
+
+		LOGGER.info("Search Tours -end");
+		return ResponseEntity.status(404).body("Unable to get  All Tours due to " + errorMsg);
+
+	}
 
 }

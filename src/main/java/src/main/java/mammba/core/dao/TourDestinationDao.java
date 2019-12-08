@@ -11,5 +11,5 @@ public interface TourDestinationDao {
 	
 	List<TourDestination> getTourDestination() throws DaoException;
 	
-	
+	List<TourDestination> findByTourDestinationDesc(List<String> tourDestinations) throws DaoException;
 }

@@ -117,6 +117,89 @@ public class TourDaoImpl implements TourDao{
 		return null;
 	}
 
+	@Override
+	public List<Tour> searchTours(Tour tour) throws DaoException {
+		// TODO Auto-generated method stub
+		if(tour == null) {
+			return null;
+		}
+
+		try {			
+			StringBuilder sqlQuery = new StringBuilder(this.queryManager.getQuery("searchTourCustomQuery"));
+			MapSqlParameterSource params = new MapSqlParameterSource();
+			sqlQuery.append(" WHERE 1=1 ");
+			
+			if(tour.getStartDate() !=null && tour.getEndDate() !=null ) {
+				sqlQuery.append("AND tour_startDate >= :tourStartDate ");
+				sqlQuery.append("AND tour_endDate <= :tourEndDate ");
+				params.addValue("tourStartDate", tour.getStartDate())
+                 .addValue("tourEndDate",tour.getEndDate());
+			}
+			if(tour.getTourMinSlot() !=null && tour.getTourMaxSlot() !=null ) {
+				sqlQuery.append("AND tour_minSlot >= :tourMinSlot ");
+				sqlQuery.append("AND tour_maxSlot <= :tourMaxSlot ");
+				params.addValue("tourMinSlot", tour.getTourMinSlot())
+                      .addValue("tourMaxSlot", tour.getTourMaxSlot());
+			}			
+			if(tour.getTourType()!= null) {
+				sqlQuery.append("AND tour_type = :tourType ");
+				params.addValue("tourType", tour.getTourType());
+			}			
+			
+			
+			LOGGER.info("Log searchTours "+ sqlQuery.toString());
+			return this.namedParameterJdbcTemplate.query(sqlQuery.toString(), params,new TourMapper());
+			
+			
+		} catch (SQLException e) {
+			LOGGER.error("Search Tours(TourDAO)-exception", e);
+			throw new DaoException("MAMMBA[UDI-C]-01-Database error");
+		}
+	}
+
+	@Override
+	public List<Tour> searchTours(Tour tour, List<Integer> tourIdList) throws DaoException {
+		
+	if(tour == null) {
+		return null;
+	}
+
+	try {			
+		StringBuilder sqlQuery = new StringBuilder(this.queryManager.getQuery("searchTourCustomQuery"));
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		sqlQuery.append(" WHERE 1=1 ");
+		
+		if(tour.getStartDate() !=null && tour.getEndDate() !=null ) {
+			sqlQuery.append("AND tour_startDate >= :tourStartDate ");
+			sqlQuery.append("AND tour_endDate <= :tourEndDate ");
+			params.addValue("tourStartDate", tour.getStartDate())
+             .addValue("tourEndDate",tour.getEndDate());
+		}
+		if(tour.getTourMinSlot() !=null && tour.getTourMaxSlot() !=null ) {
+			sqlQuery.append("AND tour_minSlot >= :tourMinSlot ");
+			sqlQuery.append("AND tour_maxSlot <= :tourMaxSlot ");
+			params.addValue("tourMinSlot", tour.getTourMinSlot())
+                  .addValue("tourMaxSlot", tour.getTourMaxSlot());
+		}			
+		if(tour.getTourType()!= null) {
+			sqlQuery.append("AND tour_type = :tourType ");
+			params.addValue("tourType", tour.getTourType());
+		}
+		if(tourIdList!= null && !tourIdList.isEmpty()) {
+			sqlQuery.append("AND tour_Id IN (:tourId)");
+			params.addValue("tourId", tourIdList);
+		}		
+		
+		
+		LOGGER.info("Log searchTours "+ sqlQuery.toString());
+		return this.namedParameterJdbcTemplate.query(sqlQuery.toString(), params,new TourMapper());
+		
+		
+	} catch (SQLException e) {
+		LOGGER.error("Search Tours(TourDAO)-exception", e);
+		throw new DaoException("MAMMBA[UDI-C]-01-Database error");
+	}}
+
 	
 	
    

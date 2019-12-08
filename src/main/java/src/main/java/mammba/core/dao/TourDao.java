@@ -11,6 +11,9 @@ public interface TourDao {
 	
 	List<Tour> getTours() throws DaoException;
 	
+	List<Tour> searchTours(Tour tour) throws DaoException;
+	
+	List<Tour> searchTours(Tour tour, List<Integer> tourIdList) throws DaoException;
 	
 	Tour getTour(Integer tourId) throws DaoException;
 	

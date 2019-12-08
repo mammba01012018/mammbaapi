@@ -11,5 +11,7 @@ public interface TourService {
 	
 	Tour getTour(Integer tourId) throws ServiceException; 
 	
+	List<Tour> searchTour(Tour tour) throws ServiceException; 
+	
 	List<Tour> getTours() throws ServiceException; 
 }

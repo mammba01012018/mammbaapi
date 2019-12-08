@@ -1,6 +1,7 @@
 package src.main.java.mammba.core.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,28 @@ public class TourServiceImpl implements TourService{
 		// TODO Auto-generated method stub
 		try {
 			return this.tourDao.getTour(tourId);
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(ErrorMessage.TOUR_ERR_ADD_ERR);
+		}
+	}
+
+	@Override
+	public List<Tour> searchTour(Tour tour) throws ServiceException {
+		// TODO Auto-generated method stub
+		try {
+			if (tour != null && tour.getTourDestination() != null) {
+				List<String> destinationList = tour.getTourDestination().stream().map(TourDestination :: getTourDestinationDescription).collect(Collectors.toList());
+				
+				List<TourDestination> tourDestinationList = tourDestinationDao.findByTourDestinationDesc(destinationList);
+				
+				List<Integer> tourIDList = tourDestinationList.stream().map(TourDestination :: getTourId).collect(Collectors.toList());
+				return this.tourDao.searchTours(tour,tourIDList);
+
+			} else {
+				return this.tourDao.searchTours(tour);
+			}
+
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(ErrorMessage.TOUR_ERR_ADD_ERR);
