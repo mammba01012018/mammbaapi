@@ -10,13 +10,17 @@ import org.springframework.stereotype.Service;
 
 import src.main.java.mammba.core.dao.TourDao;
 import src.main.java.mammba.core.dao.TourDestinationDao;
+import src.main.java.mammba.core.dao.TourInclusionsDao;
 import src.main.java.mammba.core.dao.impl.SecurityQuestionDaoImpl;
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.exception.ServiceException;
 import src.main.java.mammba.core.service.TourService;
+import src.main.java.mammba.core.service.UserService;
 import src.main.java.mammba.core.util.ErrorMessage;
+import src.main.java.mammba.model.Partner;
 import src.main.java.mammba.model.Tour;
 import src.main.java.mammba.model.TourDestination;
+import src.main.java.mammba.model.TourInclusions;
 
 @Service("TourServiceImpl")
 public class TourServiceImpl implements TourService{
@@ -27,7 +31,14 @@ public class TourServiceImpl implements TourService{
 	@Autowired
 	private TourDestinationDao tourDestinationDao;
 	
-	  private static final Logger LOGGER = Logger.getLogger(TourServiceImpl.class);
+	@Autowired
+	private TourInclusionsDao tourInclusionsDao;
+	
+	@Autowired 
+	UserService userPartnerService;
+	
+		
+	 private static final Logger LOGGER = Logger.getLogger(TourServiceImpl.class);
 
 
 	@Override
@@ -41,9 +52,15 @@ public class TourServiceImpl implements TourService{
 				Integer id = this.tourDestinationDao.addTourDestination(tourDestinations);
 				tourDestinations.setTourDestinationId(id);
 			}
+			for(TourInclusions tourInclusions : tour.getTourInclusions()) {
+				tourInclusions.setTourId(tourInclusions.getTourId());
+				tourInclusions.setTourInclusions(tourInclusions.getTourInclusions());
+				Integer id = this.tourInclusionsDao.addTourInclusions(tourInclusions);
+				tourInclusions.setTourInclusionId(id);
+				
+			}
 			
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(ErrorMessage.TOUR_ERR_ADD_ERR);
 		}		
 	}
@@ -65,7 +82,19 @@ public class TourServiceImpl implements TourService{
 	public Tour getTour(Integer tourId) throws ServiceException {
 		// TODO Auto-generated method stub
 		try {
-			return this.tourDao.getTour(tourId);
+			Tour tour =  this.tourDao.getTour(tourId);
+			
+			List<TourDestination> tourDestination = tourDestinationDao.findByTourId(tour.getTourId());
+			List<TourInclusions> tourInclusions = tourInclusionsDao.findByTourId(tour.getTourId());
+			tour.setTourDestination(tourDestination);
+			tour.setTourInclusions(tourInclusions);
+			if(tour.getPartner()!=null) {
+				Partner partner = (Partner) userPartnerService.getUserDetails(tour.getPartner().getPartnerId());
+				partner.setPassword(null);
+				tour.setPartner(partner);
+			}
+			
+			return tour;
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(ErrorMessage.TOUR_ERR_ADD_ERR);
@@ -75,19 +104,28 @@ public class TourServiceImpl implements TourService{
 	@Override
 	public List<Tour> searchTour(Tour tour) throws ServiceException {
 		// TODO Auto-generated method stub
+		List<Tour> tourList = null;
 		try {
 			if (tour != null && tour.getTourDestination() != null) {
 				List<String> destinationList = tour.getTourDestination().stream().map(TourDestination :: getTourDestinationDescription).collect(Collectors.toList());
-				
 				List<TourDestination> tourDestinationList = tourDestinationDao.findByTourDestinationDesc(destinationList);
-				
 				List<Integer> tourIDList = tourDestinationList.stream().map(TourDestination :: getTourId).collect(Collectors.toList());
-				return this.tourDao.searchTours(tour,tourIDList);
+				
+				 tourList = this.tourDao.searchTours(tour,tourIDList);
 
 			} else {
-				return this.tourDao.searchTours(tour);
+				 tourList = this.tourDao.searchTours(tour);
 			}
-
+			
+			for(Tour curTour : tourList) {
+				
+				List<TourDestination> tourDestination = tourDestinationDao.findByTourId(curTour.getTourId());
+				List<TourInclusions> tourInclusions = tourInclusionsDao.findByTourId(curTour.getTourId());
+				curTour.setTourDestination(tourDestination);
+				curTour.setTourInclusions(tourInclusions);
+			}			
+			
+			return tourList;
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(ErrorMessage.TOUR_ERR_ADD_ERR);

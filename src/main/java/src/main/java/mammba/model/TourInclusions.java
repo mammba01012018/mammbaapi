@@ -1,21 +1,13 @@
 package src.main.java.mammba.model;
 
+import lombok.Data;
+
+@Data
 public class TourInclusions {
 	private Integer tourInclusionId;
 	private String tourInclusions;
+	private Integer tourId;
 	
-	public Integer getTourInclusionId() {
-		return tourInclusionId;
-	}
-	public void setTourInclusionId(Integer tourInclusionId) {
-		this.tourInclusionId = tourInclusionId;
-	}
-	public String getTourInclusions() {
-		return tourInclusions;
-	}
-	public void setTourInclusions(String tourInclusions) {
-		this.tourInclusions = tourInclusions;
-	}
-	
+
 	
 }

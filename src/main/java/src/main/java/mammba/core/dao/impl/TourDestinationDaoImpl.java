@@ -88,4 +88,17 @@ public class TourDestinationDaoImpl implements TourDestinationDao{
 		}
 	}
 
+	@Override
+	public List<TourDestination> findByTourId(Integer tourId) throws DaoException {
+		try {
+			String sql = this.queryManager.getQuery("findByTourIdTourDestination");
+			SqlParameterSource parameters = new MapSqlParameterSource().addValue("tourId", tourId);
+			return  this.namedParameterJdbcTemplate.query(sql,parameters,new TourDestinationMapper());
+			
+		} catch (DataAccessException | SQLException e) {
+			LOGGER.error("findByTourDestinationDesc()- exception", e);
+			throw new DaoException("MAMMBA[AT]-04-Database error");
+		}
+	}
+
 }

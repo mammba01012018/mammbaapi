@@ -2,12 +2,23 @@ package src.main.java.mammba.model;
 
 import java.util.Date;
 
-public class Booking {
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import lombok.Data;
+
+@Data
+public class Booking {
+	
+	@JsonInclude(Include.NON_NULL)
 	private String bookingNumber;
 	
+	@JsonIgnore
 	private String bookingStatus;
 	
+	@JsonIgnore
 	private String bookingDepositSlip;
 	
 	private String bookingPickupAddress;
@@ -15,114 +26,25 @@ public class Booking {
 	private String bookingMobileNumber;
 	
 	private Date bookingPickuptime;
-	
+		
 	private Date bookingDropOfftime;
 	
+	@JsonIgnore
 	private String bookingTypeOfCar;
 	
+	@JsonIgnore
 	private String bookingPlateNumber;
 	
+	@JsonIgnore
 	private String bookingDriverName;
 	
+	@JsonIgnore
 	private String bookingDriverContactNum;
 	
 	private Integer bookingNoOfGuest;
 	
-
-	public String getBookingNumber() {
-		return bookingNumber;
-	}
-
-	public void setBookingNumber(String bookingNumber) {
-		this.bookingNumber = bookingNumber;
-	}
-
-	public String getBookingStatus() {
-		return bookingStatus;
-	}
-
-	public void setBookingStatus(String bookingStatus) {
-		this.bookingStatus = bookingStatus;
-	}
-
-	public String getBookingDepositSlip() {
-		return bookingDepositSlip;
-	}
-
-	public void setBookingDepositSlip(String bookingDepositSlip) {
-		this.bookingDepositSlip = bookingDepositSlip;
-	}
-
-	public String getBookingPickupAddress() {
-		return bookingPickupAddress;
-	}
-
-	public void setBookingPickupAddress(String bookingPickupAddress) {
-		this.bookingPickupAddress = bookingPickupAddress;
-	}
-
-	public String getBookingMobileNumber() {
-		return bookingMobileNumber;
-	}
-
-	public void setBookingMobileNumber(String bookingMobileNumber) {
-		this.bookingMobileNumber = bookingMobileNumber;
-	}
-
-	public Date getBookingPickuptime() {
-		return bookingPickuptime;
-	}
-
-	public void setBookingPickuptime(Date bookingPickuptime) {
-		this.bookingPickuptime = bookingPickuptime;
-	}
-
-	public Date getBookingDropOfftime() {
-		return bookingDropOfftime;
-	}
-
-	public void setBookingDropOfftime(Date bookingDropOfftime) {
-		this.bookingDropOfftime = bookingDropOfftime;
-	}
-
-	public String getBookingTypeOfCar() {
-		return bookingTypeOfCar;
-	}
-
-	public void setBookingTypeOfCar(String bookingTypeOfCar) {
-		this.bookingTypeOfCar = bookingTypeOfCar;
-	}
-
-	public String getBookingPlateNumber() {
-		return bookingPlateNumber;
-	}
-
-	public void setBookingPlateNumber(String bookingPlateNumber) {
-		this.bookingPlateNumber = bookingPlateNumber;
-	}
-
-	public String getBookingDriverName() {
-		return bookingDriverName;
-	}
-
-	public void setBookingDriverName(String bookingDriverName) {
-		this.bookingDriverName = bookingDriverName;
-	}
-
-	public String getBookingDriverContactNum() {
-		return bookingDriverContactNum;
-	}
-
-	public void setBookingDriverContactNum(String bookingDriverContactNum) {
-		this.bookingDriverContactNum = bookingDriverContactNum;
-	}
-
-	public Integer getBookingNoOfGuest() {
-		return bookingNoOfGuest;
-	}
-
-	public void setBookingNoOfGuest(Integer bookingNoOfGuest) {
-		this.bookingNoOfGuest = bookingNoOfGuest;
-	}
-
+	private Integer memberId;
+	
+	private Integer tourId;	 
+	
 }

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
@@ -57,6 +58,19 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
 
         auth.authenticationProvider(this.authProvider);
     }
+    
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs",
+                                   "/configuration/ui",
+                                   "/swagger-resources/**",
+                                   "/configuration/security",
+                                   "/swagger-ui.html",
+                                   "/webjars/**",
+                                   "/city/**",
+                                   "/book/**",
+                                  "/tour/**");
+    }
 
 
     @Override
@@ -64,7 +78,7 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
           .antMatchers("/registerMember", "/registerPartner", "/login", "/logout", "/securityQuestions/**").permitAll()
           .antMatchers("/mammba-user/**").hasAnyRole("MEMBER", "PARTNER", "ADMIN")
-          .antMatchers("/tour/**").hasAnyRole("MEMBER", "PARTNER")
+          //.antMatchers("/tour/**").hasAnyRole("MEMBER", "PARTNER")
           .anyRequest().denyAll()
           .and()
           .exceptionHandling()
@@ -84,7 +98,8 @@ public class MammbaSecurityConfig extends WebSecurityConfigurerAdapter {
           .and()
           .csrf().csrfTokenRepository(
                new LazyCsrfTokenRepository(new HttpSessionCsrfTokenRepository()))
-              .ignoringAntMatchers("/registerMember", "/registerPartner", "/login", "/logout", "/securityQuestions/**")
+              .ignoringAntMatchers("/registerMember", "/registerPartner", "/login", "/logout", "/securityQuestions/**"
+            		  ,"/city/**")
           .and()
               .cors().configurationSource(this.corsConfigurationSource());
     }

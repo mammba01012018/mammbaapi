@@ -9,6 +9,10 @@ public interface TourDao {
 
 	Integer addTour(Tour tour) throws DaoException;
 	
+	Boolean updateTour(Tour tour) throws DaoException;
+	
+	Boolean updateTourSlot(Integer tourId, Integer tourSlot) throws DaoException;
+	
 	List<Tour> getTours() throws DaoException;
 	
 	List<Tour> searchTours(Tour tour) throws DaoException;

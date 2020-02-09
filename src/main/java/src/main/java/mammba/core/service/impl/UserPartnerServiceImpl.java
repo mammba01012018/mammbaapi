@@ -148,8 +148,14 @@ public class UserPartnerServiceImpl implements UserService {
 
     @Override
     public MammbaUser getUserDetails(int userId) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
+    	 MammbaUser user = null;
+    	 try {
+    		 user = this.userDao.getUserDetails(userId);
+    		 
+    	 } catch(DaoException e) {
+             throw new ServiceException(ErrorMessage.PROFILE_ERR_ACS_DTA);
+         }
+        return user;
     }
 
 }

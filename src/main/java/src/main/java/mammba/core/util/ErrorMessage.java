@@ -34,5 +34,10 @@ public interface ErrorMessage {
     String SQSTN_INC_QA = "Incomplete Security Question Parameters.";
     
     String TOUR_ERR_ADD_ERR = "Error adding Tour";
+    String CITY_ERR_FETCH_ERR = "Error fetching Cities";
+    
+    String BOOKING_ERR = "Error encountered upon booking";    
+    String BOOKING_DUPLICATE_ERR = "The Tour is already Book! Please wait for the confirmation.";
+    String BOOKING_CANCEL_ERR = "Error encountered upon cancelling booking";
 
 }

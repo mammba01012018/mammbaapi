@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import src.main.java.mammba.core.dao.TourDao;
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.core.util.QueryManager;
+import src.main.java.mammba.model.Partner;
 import src.main.java.mammba.model.Tour;
 
 @Repository("tourDaoImpl")
@@ -40,6 +41,12 @@ public class TourDaoImpl implements TourDao{
             tour.setStartDate(rs.getDate("tour_startDate"));
             tour.setEndDate(rs.getDate("tour_endDate"));
             tour.setTourPackageName(rs.getString("tour_package"));
+            tour.setTourRatings(rs.getDouble("tour_rate"));
+            tour.setTourPrice(rs.getDouble("tour_price"));
+            tour.setTourAvailableSlot(rs.getInt("tour_available_slot"));
+            Partner partner = new Partner();
+            partner.setPartnerId(rs.getInt("partner_id"));
+            tour.setPartner(partner);
             return tour;
         }
     }
@@ -73,18 +80,15 @@ public class TourDaoImpl implements TourDao{
 	}
 
 	@Override
-	public List<Tour> getTours() throws DaoException {
-	
+	public List<Tour> getTours() throws DaoException {	
 		 try {
 			String sql = this.queryManager.getQuery("getAllTours");
 			return  this.namedParameterJdbcTemplate.query(sql, new TourMapper());
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 
-		return null;
+		} catch (DataAccessException | SQLException e) {
+            LOGGER.error("addTour()-exception", e);
+            throw new DaoException("MAMMBA[AT]-04-Database error");
+        }
 	}
 
 
@@ -98,12 +102,12 @@ public class TourDaoImpl implements TourDao{
 	public Tour getTour(Integer tourId) throws DaoException {
 		// TODO Auto-generated method stub
 		try {
-			
+
 			String sql = this.queryManager.getQuery("getTours");
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("tourId", tourId);
 
-			List<Tour> tourList = this.namedParameterJdbcTemplate.query(sql, params ,new TourMapper());
+			List<Tour> tourList = this.namedParameterJdbcTemplate.query(sql, params, new TourMapper());
 
 			if (tourList != null && !tourList.isEmpty()) {
 				return tourList.get(0);
@@ -199,6 +203,34 @@ public class TourDaoImpl implements TourDao{
 		LOGGER.error("Search Tours(TourDAO)-exception", e);
 		throw new DaoException("MAMMBA[UDI-C]-01-Database error");
 	}}
+
+	@Override
+	public Boolean updateTour(Tour tour) throws DaoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean updateTourSlot(Integer tourId, Integer tourSlot) throws DaoException {
+		try {
+
+			String sql = this.queryManager.getQuery("updateTourSlot");
+			MapSqlParameterSource params = new MapSqlParameterSource();
+			params.addValue("tourId", tourId);
+			params.addValue("tourSlot", tourSlot);
+
+			 Integer rows = this.namedParameterJdbcTemplate.update(sql, params);
+			if (rows > 0) {
+				return true;
+			}
+
+		} catch (SQLException | DataAccessException e) {
+			LOGGER.error("getTour(TourDAO)-exception", e);
+			throw new DaoException("MAMMBA[UDI-C]-01-Database error");
+		}
+		return null;
+		
+	}
 
 	
 	

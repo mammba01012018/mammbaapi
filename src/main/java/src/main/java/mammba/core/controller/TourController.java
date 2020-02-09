@@ -27,7 +27,7 @@ public class TourController {
 	@Autowired
 	private TourService tourService;
 
-	private static final Logger LOGGER = Logger.getLogger(ProfileController.class);
+	private static final Logger LOGGER = Logger.getLogger(TourController.class);
 
 	@PostMapping("tour/add-tour-package")
 	public ResponseEntity<?> addTour(@RequestBody Tour tour) {

@@ -17,6 +17,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+
 import src.main.java.mammba.core.exception.DaoException;
 import src.main.java.mammba.model.MammbaUser;
 import src.main.java.mammba.model.Partner;
@@ -136,5 +137,27 @@ public class PartnerDaoImpl extends MammbaUserDaoImpl {
 
         return null;
     }
+    
+    @Override
+    public MammbaUser getUserDetails(int userId) throws DaoException {
+        try {
+            String sql = this.queryManager.getQuery("getPartnerDetailByPartnerId");
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("partnerId", userId);
+            List<Partner> partner = this.namedParameterJdbcTemplate.query(sql,
+                    params, new PartnerMapper());
+            if (partner != null && !partner.isEmpty()) {
+                return partner.get(0);
+            }
+        } catch (SQLException | DataAccessException e) {
+            LOGGER.error("getUserDetails()-exception",e);
+            throw new DaoException("MAMMBA[GUD]-02-Database error");
+
+        }
+
+        return null;
+    }
+    
+    
 
 }
