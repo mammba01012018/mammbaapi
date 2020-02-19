@@ -35,16 +35,33 @@ public class BookingController {
 	        return ResponseEntity.status(404).body(errorMsg);
 	}
 	
-	public ResponseEntity<?> cancelBookTour(@RequestParam Integer bookId) {
+	@PostMapping("/book/cancelTour")
+	public ResponseEntity<?> cancelBookTour(@RequestParam String bookingNumber) {
+		 String errorMsg = "";
+		 
+			try {
+				bookingService.cancelTour(bookingNumber);
+			} catch (ServiceException e) {
+				errorMsg = e.getMessage();
+			}
+			
+			 LOGGER.info("Cancel Tour End");
+		        return ResponseEntity.status(404).body(errorMsg);
 		
-		
-		return null;
 	}
 	
 	public ResponseEntity<?> getBookTour(@RequestParam Integer bookId) {
+		 String errorMsg = "";
+		 
+			try {
+				bookingService.getBookingDetails(bookId);
+			} catch (ServiceException e) {
+				errorMsg = e.getMessage();
+			}
+			
+			 LOGGER.info("Get book Details End");
+		        return ResponseEntity.status(404).body(errorMsg);
 		
-		
-		return null;
 	} 
 	
 	public ResponseEntity<?> getAllBookTour() {
